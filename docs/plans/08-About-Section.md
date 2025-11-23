@@ -5,7 +5,7 @@ Create compelling about section highlighting 3Dworks' expertise, technology,
 and commitment to precision 3D printing with modern design.
 
 Tasks:
-Task 1: About Content Structure
+Task 1: About Content Structure [x]
 Create components/sections/About.tsx:
 - Split layout: text content + image/visual
 - Section heading: "Precision Meets Innovation" (gradient text)
@@ -21,7 +21,7 @@ Create components/sections/About.tsx:
   * Light: text-slate-600
   * Dark: dark:text-slate-300
 
-Task 2: Stats/Achievements Section
+Task 2: Stats/Achievements Section [x]
 Add key metrics to About:
 - Grid of stats cards with glassmorphism
 - Numbers: "1000+ Projects Completed", "0.01mm Precision", "15+ Material Types", "24h Turnaround Available"
@@ -29,7 +29,7 @@ Add key metrics to About:
 - Cyan gradient accent on numbers
 - Icons for each stat
 
-Task 3: Technology & Equipment
+Task 3: Technology & Equipment [x]
 Create showcase of capabilities:
 - List of 3D printing technologies (FDM, SLA, SLS, etc.)
 - Supported materials with icons
@@ -38,14 +38,14 @@ Create showcase of capabilities:
 - Glassmorphism cards in grid layout
 - Tech-forward icons
 
-Task 4: Team Section (Optional)
+Task 4: Team Section (Optional) [ ]
 If applicable, add team showcase:
 - Team member cards with photos
 - Expertise areas (engineering, design, materials science)
 - Glassmorphism hover effects
 - Grid layout with proper spacing
 
-Task 5: Visual Elements
+Task 5: Visual Elements [x]
 Add supporting visuals:
 - High-quality images of 3D printers in action
 - Macro shots of printed parts
@@ -53,7 +53,7 @@ Add supporting visuals:
 - Use next/image with proper optimization
 - Parallax or hover effects on images
 
-Task 6: Add to Homepage
+Task 6: Add to Homepage [x]
 Update app/page.tsx:
 - Add About section after Process/Timeline
 - Ensure visual hierarchy and flow
