@@ -1,27 +1,33 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Clock, Box, ArrowUpRight } from "lucide-react";
 import { PortfolioItem } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
 import { MagneticCard } from "@/components/effects/MagneticCard";
+import { PortfolioModal } from "./PortfolioModal";
 
 interface PortfolioCardProps {
   project: PortfolioItem;
 }
 
 export function PortfolioCard({ project }: PortfolioCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <MagneticCard intensity={0.15} tiltIntensity={3}>
-      <motion.div
-        layout
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.3 }}
-        className="group relative rounded-xl overflow-hidden glass-card hover-lift"
-      >
+    <>
+      <MagneticCard intensity={0.15} tiltIntensity={3}>
+        <motion.div
+          layout
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.3 }}
+          className="group relative rounded-xl overflow-hidden glass-card hover-lift cursor-pointer"
+          onClick={() => setIsModalOpen(true)}
+        >
       {/* Image Container */}
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
@@ -74,5 +80,11 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
       </div>
       </motion.div>
     </MagneticCard>
+      <PortfolioModal
+        project={project}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
   );
 }

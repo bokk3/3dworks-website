@@ -7,6 +7,7 @@ import { ArrowRight, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ParallaxElement } from "@/components/effects/ParallaxSection";
+// import { VideoBackground } from "@/components/media/VideoBackground";
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -23,6 +24,13 @@ export function Hero() {
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
     >
+      {/* Video Background - Disabled for now */}
+      {/* <VideoBackground
+        videoSrc="/videos/hero-3d-printing.webm"
+        fallbackImage="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1920&h=1080&fit=crop"
+        overlay
+      /> */}
+
       {/* Background Elements */}
       <div className="absolute inset-0 z-0">
         {/* Grid Pattern */}

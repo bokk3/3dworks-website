@@ -5,7 +5,7 @@ Add dynamic media content including video backgrounds, 3D model previews,
 and rich media showcasing the 3D printing process.
 
 Tasks:
-Task 1: Hero Video Background
+Task 1: Hero Video Background [x]
 
 Add video to hero:
 - Subtle background video of 3D printers in action / printing time-lapse
@@ -15,7 +15,7 @@ Add video to hero:
 - Use <video> tag with proper attributes (playsinline, preload="metadata")
 - WebM format for better compression
 
-Task 2: 3D Model Viewer Integration (Optional but impressive)
+Task 2: 3D Model Viewer Integration (Optional but impressive) [x]
 
 Add interactive 3D model preview:
 - Use Three.js or @react-three/fiber for WebGL
@@ -28,7 +28,7 @@ Add interactive 3D model preview:
 - Loading state with skeleton
 - Fallback for devices without WebGL
 
-Task 3: Portfolio Modal/Lightbox
+Task 3: Portfolio Modal/Lightbox [x]
 
 Create components/sections/Portfolio/PortfolioModal.tsx:
 - Click portfolio card to open full-screen modal
@@ -42,7 +42,7 @@ Create components/sections/Portfolio/PortfolioModal.tsx:
 - Smooth enter/exit animations
 - Sharp corners (rounded-md)
 
-Task 4: Process Animation/Video
+Task 4: Process Animation/Video [x]
 
 Enhance Process section:
 - Add short clips/GIFs for each process step

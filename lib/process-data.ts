@@ -12,6 +12,9 @@ export interface ProcessStep {
   title: string;
   description: string;
   icon: any; // Lucide icon component
+  videoUrl?: string;
+  animationUrl?: string; // For GIFs
+  thumbnailImage?: string;
 }
 
 export const processSteps: ProcessStep[] = [

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ProcessStep as ProcessStepType } from "@/lib/process-data";
 import { cn } from "@/lib/utils";
+import { ProcessVideo } from "@/components/media/ProcessVideo";
 
 interface ProcessStepProps {
   step: ProcessStepType;
@@ -57,9 +58,22 @@ export function ProcessStep({ step, index, isLast }: ProcessStepProps) {
           <h3 className="text-xl font-display font-bold pt-1">{step.title}</h3>
         </div>
 
-        <p className="text-muted-foreground text-sm leading-relaxed">
+        <p className="text-muted-foreground text-sm leading-relaxed mb-4">
           {step.description}
         </p>
+
+        {/* Process Video/Animation */}
+        {(step.videoUrl || step.animationUrl || step.thumbnailImage) && (
+          <div className="mt-4">
+            <ProcessVideo
+              videoUrl={step.videoUrl}
+              animationUrl={step.animationUrl}
+              thumbnailImage={step.thumbnailImage}
+              alt={`${step.title} process`}
+              className="w-full"
+            />
+          </div>
+        )}
       </motion.div>
     </div>
   );
