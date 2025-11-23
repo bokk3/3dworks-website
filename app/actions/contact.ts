@@ -55,15 +55,29 @@ export async function submitContactForm(formData: FormData) {
     }
   }
 
+  const complexity = formData.get("complexity");
+  const material = formData.get("material");
+  const quantity = formData.get("quantity");
+  const deliveryDate = formData.get("deliveryDate");
+  const files = formData.getAll("files") as File[];
+
   // Log data (mock email sending)
   console.log("--- Contact Form Submission ---");
   console.log("Name:", name);
   console.log("Email:", email);
   console.log("Project Type:", projectType);
+  console.log("Complexity:", complexity);
+  console.log("Material:", material);
+  console.log("Quantity:", quantity);
+  console.log("Delivery Date:", deliveryDate);
   console.log("Message:", message);
 
-  if (file && file.size > 0) {
-    console.log("File Uploaded:", file.name, `(${file.size} bytes)`);
+  if (files && files.length > 0) {
+    files.forEach((file, index) => {
+      if (file.size > 0) {
+        console.log(`File ${index + 1}:`, file.name, `(${file.size} bytes)`);
+      }
+    });
     // In a real app, upload to S3/Blob storage here
   }
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Upload,
   Send,
@@ -9,6 +9,7 @@ import {
   AlertCircle,
   Loader2,
   X,
+  File,
 } from "lucide-react";
 import { submitContactForm } from "@/app/actions/contact";
 import { Button } from "@/components/ui/button";
@@ -27,49 +28,82 @@ interface ValidationErrors {
   name?: string;
   email?: string;
   message?: string;
-  file?: string;
+  files?: string;
+  quantity?: string;
+  deliveryDate?: string;
 }
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+const MAX_FILES = 5;
 const ALLOWED_FILE_TYPES = [".stl", ".obj", ".step", ".stp"];
 const MIN_MESSAGE_LENGTH = 20;
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+const materials = [
+  "PLA",
+  "ABS",
+  "PETG",
+  "Resin",
+  "Nylon",
+  "Carbon Fiber Nylon",
+  "TPU",
+  "Tough PLA",
+  "High-Temp Resin",
+  "Not Sure",
+];
+
+const complexities = [
+  { value: "simple", label: "Simple" },
+  { value: "medium", label: "Medium" },
+  { value: "complex", label: "Complex" },
+];
+
 export function ContactForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState<string | false>(false);
   const [error, setError] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropZoneRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    projectType: "prototyping",
     message: "",
+    complexity: "medium",
+    material: "",
+    quantity: "",
+    deliveryDate: "",
   });
   const formRef = useRef<HTMLFormElement>(null);
 
   const validateField = (name: string, value: string): string | undefined => {
     switch (name) {
       case "name":
-        if (!value.trim()) {
-          return "Name is required";
-        }
+        if (!value.trim()) return "Name is required";
         return undefined;
       case "email":
-        if (!value.trim()) {
-          return "Email is required";
-        }
-        if (!emailRegex.test(value)) {
-          return "Please enter a valid email address";
-        }
+        if (!value.trim()) return "Email is required";
+        if (!emailRegex.test(value)) return "Please enter a valid email address";
         return undefined;
       case "message":
-        if (!value.trim()) {
-          return "Message is required";
-        }
-        if (value.trim().length < MIN_MESSAGE_LENGTH) {
+        if (!value.trim()) return "Message is required";
+        if (value.trim().length < MIN_MESSAGE_LENGTH)
           return `Message must be at least ${MIN_MESSAGE_LENGTH} characters`;
+        return undefined;
+      case "quantity":
+        if (value && (isNaN(Number(value)) || Number(value) < 1))
+          return "Quantity must be a positive number";
+        return undefined;
+      case "deliveryDate":
+        if (value) {
+          const date = new Date(value);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          if (date < today) return "Delivery date cannot be in the past";
         }
         return undefined;
       default:
@@ -77,35 +111,24 @@ export function ContactForm() {
     }
   };
 
-  const validateFile = (file: File): string | undefined => {
-    const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
-    if (!ALLOWED_FILE_TYPES.includes(fileExtension)) {
-      return `File type not allowed. Please upload ${ALLOWED_FILE_TYPES.join(", ")} files`;
+  const validateFiles = (fileList: File[]): string | undefined => {
+    if (fileList.length > MAX_FILES) {
+      return `Maximum ${MAX_FILES} files allowed`;
     }
-    if (file.size > MAX_FILE_SIZE) {
-      return `File size must be less than ${MAX_FILE_SIZE / (1024 * 1024)}MB`;
+    for (const file of fileList) {
+      const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
+      if (!ALLOWED_FILE_TYPES.includes(fileExtension)) {
+        return `File type not allowed. Please upload ${ALLOWED_FILE_TYPES.join(", ")} files`;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        return `File size must be less than ${MAX_FILE_SIZE / (1024 * 1024)}MB`;
+      }
     }
     return undefined;
   };
 
-  const validateForm = (): boolean => {
-    const errors: ValidationErrors = {};
-    
-    errors.name = validateField("name", formData.name);
-    errors.email = validateField("email", formData.email);
-    errors.message = validateField("message", formData.message);
-    
-    if (file) {
-      errors.file = validateFile(file);
-    }
-
-    setValidationErrors(errors);
-    return !errors.name && !errors.email && !errors.message && !errors.file;
-  };
-
   const handleInputChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (validationErrors[name as keyof ValidationErrors]) {
       setValidationErrors((prev) => ({ ...prev, [name]: undefined }));
     }
@@ -116,26 +139,75 @@ export function ContactForm() {
     setValidationErrors((prev) => ({ ...prev, [name]: error }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const selectedFile = e.target.files[0];
-      const fileError = validateFile(selectedFile);
-      
-      if (fileError) {
-        setValidationErrors((prev) => ({ ...prev, file: fileError }));
-        setFile(null);
-        e.target.value = ""; // Clear the input
-      } else {
-        setFile(selectedFile);
-        setValidationErrors((prev) => ({ ...prev, file: undefined }));
-      }
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    const validFiles = droppedFiles.filter((file) => {
+      const ext = "." + file.name.split(".").pop()?.toLowerCase();
+      return ALLOWED_FILE_TYPES.includes(ext) && file.size <= MAX_FILE_SIZE;
+    });
+
+    if (validFiles.length !== droppedFiles.length) {
+      setValidationErrors((prev) => ({
+        ...prev,
+        files: "Some files were invalid. Only STL, OBJ, STEP files under 50MB are allowed.",
+      }));
     }
+
+    const newFiles = [...files, ...validFiles].slice(0, MAX_FILES);
+    setFiles(newFiles);
+    const fileError = validateFiles(newFiles);
+    setValidationErrors((prev) => ({ ...prev, files: fileError }));
+  }, [files]);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const selectedFiles = Array.from(e.target.files);
+      const newFiles = [...files, ...selectedFiles].slice(0, MAX_FILES);
+      setFiles(newFiles);
+      const fileError = validateFiles(newFiles);
+      setValidationErrors((prev) => ({ ...prev, files: fileError }));
+    }
+  };
+
+  const removeFile = (index: number) => {
+    const newFiles = files.filter((_, i) => i !== index);
+    setFiles(newFiles);
+    const fileError = validateFiles(newFiles);
+    setValidationErrors((prev) => ({ ...prev, files: fileError }));
+  };
+
+  const validateForm = (): boolean => {
+    const errors: ValidationErrors = {};
+    errors.name = validateField("name", formData.name);
+    errors.email = validateField("email", formData.email);
+    errors.message = validateField("message", formData.message);
+    errors.quantity = validateField("quantity", formData.quantity);
+    errors.deliveryDate = validateField("deliveryDate", formData.deliveryDate);
+    errors.files = validateFiles(files);
+
+    setValidationErrors(errors);
+    return !Object.values(errors).some((error) => error !== undefined);
   };
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    
-    // Validate all fields
+
     if (!validateForm()) {
       return;
     }
@@ -147,12 +219,22 @@ export function ContactForm() {
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("email", formData.email);
+    formDataToSend.append("projectType", formData.projectType);
     formDataToSend.append("message", formData.message);
-    formDataToSend.append("projectType", (e.currentTarget.elements.namedItem("projectType") as HTMLSelectElement)?.value || "prototyping");
-
-    if (file) {
-      formDataToSend.append("file", file);
+    formDataToSend.append("complexity", formData.complexity);
+    if (formData.material) {
+      formDataToSend.append("material", formData.material);
     }
+    if (formData.quantity) {
+      formDataToSend.append("quantity", formData.quantity);
+    }
+    if (formData.deliveryDate) {
+      formDataToSend.append("deliveryDate", formData.deliveryDate);
+    }
+
+    files.forEach((file) => {
+      formDataToSend.append("files", file);
+    });
 
     try {
       const result = await submitContactForm(formDataToSend);
@@ -162,8 +244,17 @@ export function ContactForm() {
       } else {
         setSuccess(result.success || "Message sent successfully! We'll get back to you soon.");
         formRef.current?.reset();
-        setFile(null);
-        setFormData({ name: "", email: "", message: "" });
+        setFiles([]);
+        setFormData({
+          name: "",
+          email: "",
+          projectType: "prototyping",
+          message: "",
+          complexity: "medium",
+          material: "",
+          quantity: "",
+          deliveryDate: "",
+        });
         setValidationErrors({});
       }
     } catch (e) {
@@ -173,12 +264,24 @@ export function ContactForm() {
     }
   }
 
-  const isFormValid = 
+  const isFormValid =
     formData.name.trim() !== "" &&
     formData.email.trim() !== "" &&
     emailRegex.test(formData.email) &&
     formData.message.trim().length >= MIN_MESSAGE_LENGTH &&
-    (!file || !validationErrors.file);
+    (!files.length || !validationErrors.files) &&
+    !validationErrors.quantity &&
+    !validationErrors.deliveryDate;
+
+  // Calculate form progress (simple indicator)
+  const formProgress = (() => {
+    let completed = 0;
+    if (formData.name.trim()) completed++;
+    if (formData.email.trim() && emailRegex.test(formData.email)) completed++;
+    if (formData.message.trim().length >= MIN_MESSAGE_LENGTH) completed++;
+    if (formData.projectType) completed++;
+    return Math.round((completed / 4) * 100);
+  })();
 
   return (
     <motion.div
@@ -188,11 +291,29 @@ export function ContactForm() {
       transition={{ duration: 0.5 }}
       className="glass-card p-8 rounded-2xl"
     >
+      {/* Form Progress Indicator */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-muted-foreground">
+            Form Progress
+          </span>
+          <span className="text-sm font-semibold text-cyan-500">{formProgress}%</span>
+        </div>
+        <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${formProgress}%` }}
+            transition={{ duration: 0.3 }}
+            className="h-full bg-gradient-to-r from-cyan-500 to-purple-500"
+          />
+        </div>
+      </div>
+
       <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
-              Name
+              Name *
             </label>
             <Input
               id="name"
@@ -203,7 +324,9 @@ export function ContactForm() {
               onBlur={(e) => handleInputBlur("name", e.target.value)}
               className={cn(
                 "bg-white/5 border-white/10",
-                validationErrors.name && "border-red-400"
+                validationErrors.name
+                  ? "border-red-400 focus-visible:ring-red-500/50"
+                  : "focus-visible:ring-cyan-500/20"
               )}
             />
             {validationErrors.name && (
@@ -212,7 +335,7 @@ export function ContactForm() {
           </div>
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
-              Email
+              Email *
             </label>
             <Input
               id="email"
@@ -224,7 +347,9 @@ export function ContactForm() {
               onBlur={(e) => handleInputBlur("email", e.target.value)}
               className={cn(
                 "bg-white/5 border-white/10",
-                validationErrors.email && "border-red-400"
+                validationErrors.email
+                  ? "border-red-400 focus-visible:ring-red-500/50"
+                  : "focus-visible:ring-cyan-500/20"
               )}
             />
             {validationErrors.email && (
@@ -233,26 +358,123 @@ export function ContactForm() {
           </div>
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label htmlFor="projectType" className="text-sm font-medium">
+              Project Type
+            </label>
+            <Select
+              name="projectType"
+              value={formData.projectType}
+              onValueChange={(value) => handleInputChange("projectType", value)}
+            >
+              <SelectTrigger className="bg-white/5 border-white/10">
+                <SelectValue placeholder="Select project type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="prototyping">Rapid Prototyping</SelectItem>
+                <SelectItem value="custom-parts">Custom Parts</SelectItem>
+                <SelectItem value="design">Design Services</SelectItem>
+                <SelectItem value="quote">Quote Request</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="complexity" className="text-sm font-medium">
+              Project Complexity
+            </label>
+            <Select
+              value={formData.complexity}
+              onValueChange={(value) => handleInputChange("complexity", value)}
+            >
+              <SelectTrigger className="bg-white/5 border-white/10">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {complexities.map((comp) => (
+                  <SelectItem key={comp.value} value={comp.value}>
+                    {comp.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label htmlFor="material" className="text-sm font-medium">
+              Preferred Material
+            </label>
+            <Select
+              value={formData.material}
+              onValueChange={(value) => handleInputChange("material", value)}
+            >
+              <SelectTrigger className="bg-white/5 border-white/10">
+                <SelectValue placeholder="Select material (optional)" />
+              </SelectTrigger>
+              <SelectContent>
+                {materials.map((material) => (
+                  <SelectItem key={material} value={material}>
+                    {material}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="quantity" className="text-sm font-medium">
+              Quantity
+            </label>
+            <Input
+              id="quantity"
+              name="quantity"
+              type="number"
+              min="1"
+              placeholder="1"
+              value={formData.quantity}
+              onChange={(e) => handleInputChange("quantity", e.target.value)}
+              onBlur={(e) => handleInputBlur("quantity", e.target.value)}
+              className={cn(
+                "bg-white/5 border-white/10",
+                validationErrors.quantity
+                  ? "border-red-400 focus-visible:ring-red-500/50"
+                  : "focus-visible:ring-cyan-500/20"
+              )}
+            />
+            {validationErrors.quantity && (
+              <p className="text-sm text-red-400">{validationErrors.quantity}</p>
+            )}
+          </div>
+        </div>
+
         <div className="space-y-2">
-          <label htmlFor="projectType" className="text-sm font-medium">
-            Project Type
+          <label htmlFor="deliveryDate" className="text-sm font-medium">
+            Expected Delivery Date
           </label>
-          <Select name="projectType" defaultValue="prototyping">
-            <SelectTrigger className="bg-white/5 border-white/10">
-              <SelectValue placeholder="Select project type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="prototyping">Rapid Prototyping</SelectItem>
-              <SelectItem value="custom-parts">Custom Parts</SelectItem>
-              <SelectItem value="design">Design Services</SelectItem>
-              <SelectItem value="quote">Quote Request</SelectItem>
-            </SelectContent>
-          </Select>
+          <Input
+            id="deliveryDate"
+            name="deliveryDate"
+            type="date"
+            value={formData.deliveryDate}
+            onChange={(e) => handleInputChange("deliveryDate", e.target.value)}
+            onBlur={(e) => handleInputBlur("deliveryDate", e.target.value)}
+            min={new Date().toISOString().split("T")[0]}
+            className={cn(
+              "bg-white/5 border-white/10",
+              validationErrors.deliveryDate
+                ? "border-red-400 focus-visible:ring-red-500/50"
+                : "focus-visible:ring-cyan-500/20"
+            )}
+          />
+          {validationErrors.deliveryDate && (
+            <p className="text-sm text-red-400">{validationErrors.deliveryDate}</p>
+          )}
         </div>
 
         <div className="space-y-2">
           <label htmlFor="message" className="text-sm font-medium">
-            Message
+            Message *
           </label>
           <Textarea
             id="message"
@@ -263,7 +485,9 @@ export function ContactForm() {
             onBlur={(e) => handleInputBlur("message", e.target.value)}
             className={cn(
               "min-h-[120px] bg-white/5 border-white/10",
-              validationErrors.message && "border-red-400"
+              validationErrors.message
+                ? "border-red-400 focus-visible:ring-red-500/50"
+                : "focus-visible:ring-cyan-500/20"
             )}
           />
           {validationErrors.message && (
@@ -276,55 +500,93 @@ export function ContactForm() {
           )}
         </div>
 
-        {/* File Upload UI */}
+        {/* Enhanced File Upload with Drag-and-Drop */}
         <div className="space-y-2">
           <label className="text-sm font-medium">
-            Upload 3D Model (Optional)
+            Upload 3D Model Files (Optional, Max {MAX_FILES} files)
           </label>
           <div
+            ref={dropZoneRef}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
             className={cn(
-              "relative border-2 border-dashed rounded-lg p-6 transition-colors hover:border-cyan-500/50 hover:bg-cyan-500/5 text-center cursor-pointer group",
-              validationErrors.file
-                ? "border-red-400"
-                : "border-white/10"
+              "relative border-2 border-dashed rounded-lg p-6 transition-all text-center cursor-pointer group",
+              isDragging
+                ? "border-cyan-500 bg-cyan-500/10 scale-105"
+                : validationErrors.files
+                ? "border-red-400 hover:border-red-300"
+                : "border-white/10 hover:border-cyan-500/50 hover:bg-cyan-500/5"
             )}
+            onClick={() => fileInputRef.current?.click()}
           >
             <input
+              ref={fileInputRef}
               type="file"
               accept=".stl,.obj,.step,.stp"
-              onChange={handleFileChange}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+              multiple
+              onChange={handleFileSelect}
+              className="hidden"
             />
-            <div className="flex flex-col items-center gap-2 text-muted-foreground group-hover:text-cyan-500 transition-colors">
+            <div
+              className={cn(
+                "flex flex-col items-center gap-2 transition-colors",
+                isDragging || validationErrors.files
+                  ? "text-cyan-500"
+                  : "text-muted-foreground group-hover:text-cyan-500"
+              )}
+            >
               <Upload size={24} />
               <span className="text-sm">
-                {file ? file.name : "Drop STL/OBJ file here or click to upload"}
+                {isDragging
+                  ? "Drop files here"
+                  : files.length > 0
+                  ? `${files.length} file(s) selected`
+                  : "Drop STL/OBJ/STEP files here or click to upload"}
               </span>
               <span className="text-xs text-muted-foreground">
-                Max size: {MAX_FILE_SIZE / (1024 * 1024)}MB
+                Max {MAX_FILES} files, {MAX_FILE_SIZE / (1024 * 1024)}MB each
               </span>
             </div>
           </div>
-          {validationErrors.file && (
-            <p className="text-sm text-red-400">{validationErrors.file}</p>
+          {validationErrors.files && (
+            <p className="text-sm text-red-400">{validationErrors.files}</p>
           )}
-          {file && !validationErrors.file && (
-            <div className="flex items-center justify-between text-xs bg-cyan-500/10 text-cyan-500 px-3 py-2 rounded-md">
-              <span className="truncate max-w-[200px]">
-                {file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  setFile(null);
-                  setValidationErrors((prev) => ({ ...prev, file: undefined }));
-                }}
-                className="hover:text-cyan-400"
-              >
-                <X size={14} />
-              </button>
-            </div>
-          )}
+
+          {/* File Previews */}
+          <AnimatePresence>
+            {files.length > 0 && (
+              <div className="space-y-2">
+                {files.map((file, index) => (
+                  <motion.div
+                    key={`${file.name}-${index}`}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="flex items-center justify-between text-xs bg-cyan-500/10 text-cyan-500 px-3 py-2 rounded-md"
+                  >
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <File size={14} />
+                      <span className="truncate">{file.name}</span>
+                      <span className="text-muted-foreground">
+                        ({(file.size / (1024 * 1024)).toFixed(2)} MB)
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeFile(index);
+                      }}
+                      className="hover:text-cyan-400 ml-2"
+                    >
+                      <X size={14} />
+                    </button>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Status Messages */}

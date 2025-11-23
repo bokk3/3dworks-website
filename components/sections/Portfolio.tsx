@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { projects } from "@/lib/portfolio-data";
 import { PortfolioFilter } from "./Portfolio/PortfolioFilter";
@@ -8,11 +8,47 @@ import { PortfolioGrid } from "./Portfolio/PortfolioGrid";
 
 export function Portfolio() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [materialFilter, setMaterialFilter] = useState("All Materials");
+  const [technologyFilter, setTechnologyFilter] = useState("All Technologies");
 
-  const filteredProjects =
-    activeFilter === "all"
-      ? projects
-      : projects.filter((project) => project.category === activeFilter);
+  const filteredProjects = useMemo(() => {
+    let filtered = projects;
+
+    // Category filter
+    if (activeFilter !== "all") {
+      filtered = filtered.filter((project) => project.category === activeFilter);
+    }
+
+    // Search filter
+    if (searchQuery.trim() !== "") {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (project) =>
+          project.title.toLowerCase().includes(query) ||
+          project.description.toLowerCase().includes(query)
+      );
+    }
+
+    // Material filter
+    if (materialFilter !== "All Materials") {
+      filtered = filtered.filter((project) => {
+        // Handle material matching (case-insensitive, partial match)
+        const projectMaterial = project.material.toLowerCase();
+        const filterMaterial = materialFilter.toLowerCase();
+        return projectMaterial.includes(filterMaterial) || projectMaterial === filterMaterial;
+      });
+    }
+
+    // Technology filter
+    if (technologyFilter !== "All Technologies") {
+      filtered = filtered.filter(
+        (project) => project.technology === technologyFilter
+      );
+    }
+
+    return filtered;
+  }, [activeFilter, searchQuery, materialFilter, technologyFilter]);
 
   return (
     <section id="portfolio" className="section relative overflow-hidden">
@@ -51,6 +87,14 @@ export function Portfolio() {
         <PortfolioFilter
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          materialFilter={materialFilter}
+          onMaterialChange={setMaterialFilter}
+          technologyFilter={technologyFilter}
+          onTechnologyChange={setTechnologyFilter}
+          filteredCount={filteredProjects.length}
+          totalCount={projects.length}
         />
 
         {/* Grid */}

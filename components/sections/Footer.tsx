@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   Facebook,
@@ -8,12 +12,63 @@ import {
   MapPin,
   Phone,
   ArrowRight,
+  CheckCircle,
+  AlertCircle,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { subscribeNewsletter } from "@/app/actions/newsletter";
+import { cn } from "@/lib/utils";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    setSuccess(false);
+
+    // Client-side validation
+    if (!email.trim()) {
+      setError("Email is required.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+
+      const result = await subscribeNewsletter(formData);
+
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setSuccess(true);
+        setEmail("");
+        // Reset success message after 5 seconds
+        setTimeout(() => setSuccess(false), 5000);
+      }
+    } catch (e) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <footer className="bg-gray-50 dark:bg-[#0a0a0f] border-t border-border transition-colors duration-300">
@@ -104,19 +159,59 @@ export function Footer() {
               Stay Updated
             </h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Subscribe to our newsletter for the latest 3D printing tips and
-              project inspiration.
+              Get project inspiration & 3D printing tips delivered to your inbox.
             </p>
-            <div className="space-y-3">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-background border-border focus:border-cyan-500 transition-colors"
-              />
-              <Button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white hover-glow-cyan">
-                Subscribe <ArrowRight size={16} className="ml-2" />
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <div className="relative">
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setError("");
+                  }}
+                  className={cn(
+                    "bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10",
+                    "backdrop-blur",
+                    "focus:border-cyan-500 focus:ring-cyan-500/20 transition-colors",
+                    error && "border-red-400 focus:ring-red-500/20"
+                  )}
+                  disabled={isLoading}
+                />
+                {error && (
+                  <p className="text-xs text-red-400 mt-1">{error}</p>
+                )}
+              </div>
+              <Button
+                type="submit"
+                disabled={isLoading || !email.trim()}
+                className="w-full bg-cyan-500 hover:bg-cyan-600 text-white hover-glow-cyan disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Subscribing...
+                  </>
+                ) : (
+                  <>
+                    Subscribe <ArrowRight size={16} className="ml-2" />
+                  </>
+                )}
               </Button>
-            </div>
+            </form>
+            <AnimatePresence>
+              {success && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="mt-3 flex items-center gap-2 text-sm text-green-500 bg-green-500/10 p-2 rounded-md"
+                >
+                  <CheckCircle size={16} />
+                  <span>Subscribed successfully!</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 

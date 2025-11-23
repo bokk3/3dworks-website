@@ -95,6 +95,7 @@ export const metadata: Metadata = {
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { QuickQuote } from "@/components/features/QuickQuote";
 
 export default function RootLayout({
   children,
@@ -121,6 +122,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-grow pt-20">{children}</main>
         <Footer />
+        <QuickQuote />
       </body>
     </html>
   );
