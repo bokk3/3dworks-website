@@ -43,6 +43,8 @@ export function ProcessVideo({
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
+          quality={85}
+          loading="lazy"
         />
       </div>
     );
@@ -58,6 +60,8 @@ export function ProcessVideo({
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
+          quality={85}
+          loading="lazy"
           unoptimized // GIFs are already optimized
         />
       </div>
@@ -119,6 +123,8 @@ export function ProcessVideo({
               fill
               className="object-cover opacity-50"
               sizes="(max-width: 768px) 100vw, 50vw"
+              quality={85}
+              loading="lazy"
             />
           </div>
         )}

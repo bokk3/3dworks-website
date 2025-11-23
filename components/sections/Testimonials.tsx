@@ -141,6 +141,8 @@ export function Testimonials() {
                             fill
                             className="object-cover"
                             sizes="64px"
+                            quality={85}
+                            loading="lazy"
                           />
                         </div>
                       )}

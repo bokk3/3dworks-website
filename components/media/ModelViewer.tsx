@@ -50,6 +50,8 @@ export function ModelViewer({
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
+            quality={85}
+            loading="lazy"
           />
         </div>
       );
@@ -75,6 +77,8 @@ export function ModelViewer({
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
+            quality={85}
+            loading="lazy"
           />
         ) : (
           <div className="text-center p-6">
@@ -117,6 +121,8 @@ export function ModelViewer({
               width={200}
               height={200}
               className="mt-4 rounded-md"
+              quality={85}
+              loading="lazy"
             />
           )}
         </div>

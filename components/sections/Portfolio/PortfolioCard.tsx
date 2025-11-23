@@ -1,13 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Clock, Box, ArrowUpRight } from "lucide-react";
 import { PortfolioItem } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
 import { MagneticCard } from "@/components/effects/MagneticCard";
-import { PortfolioModal } from "./PortfolioModal";
+
+// Dynamic import for PortfolioModal (heavy component with carousel)
+const PortfolioModal = dynamic(() => import("./PortfolioModal").then((mod) => ({ default: mod.PortfolioModal })), {
+  loading: () => null,
+});
 
 interface PortfolioCardProps {
   project: PortfolioItem;
@@ -36,6 +41,8 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-110"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          quality={85}
+          loading="lazy"
         />
 
         {/* Overlay Gradient */}

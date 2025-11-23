@@ -95,6 +95,8 @@ export function About() {
                   fill
                   className="object-cover transition-transform duration-500 hover:scale-105"
                   sizes="(max-width: 1024px) 100vw, 50vw"
+                  quality={85}
+                  loading="lazy"
                 />
               </div>
             </div>
