@@ -36,12 +36,22 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
             analytics.trackPortfolioClick(project.id, project.title);
             setIsModalOpen(true);
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              analytics.trackPortfolioClick(project.id, project.title);
+              setIsModalOpen(true);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label={`View details for ${project.title} project`}
         >
       {/* Image Container */}
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
           src={project.image}
-          alt={project.title}
+          alt={`${project.title} - 3D printed ${project.category} project in ${project.material}`}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-110"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

@@ -225,6 +225,56 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Mobile optimizations */
+  /* Prevent zoom on form inputs on iOS */
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  input[type="date"],
+  input[type="time"],
+  textarea,
+  select {
+    font-size: 16px; /* Minimum 16px to prevent zoom on iOS */
+  }
+
+  @media (min-width: 768px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="search"],
+    input[type="date"],
+    input[type="time"],
+    textarea,
+    select {
+      font-size: inherit; /* Use default size on larger screens */
+    }
+  }
+
+  /* Ensure touch targets are at least 44x44px */
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"],
+  input[type="file"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  @media (min-width: 768px) {
+    button,
+    a,
+    input[type="button"],
+    input[type="submit"] {
+      min-height: auto;
+      min-width: auto;
+    }
+  }
+
   /* Smooth scrolling */
   html {
     scroll-behavior: smooth;
@@ -294,10 +344,34 @@
     color: white;
   }
 
-  /* Focus visible */
+  /* Focus visible - Enhanced for accessibility */
   :focus-visible {
     outline: 2px solid var(--color-cyan-500);
     outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  /* Dark mode focus */
+  .dark :focus-visible {
+    outline-color: var(--color-cyan-400);
+  }
+
+  /* Ensure all interactive elements are keyboard accessible */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--color-cyan-500);
+    outline-offset: 2px;
+  }
+
+  .dark button:focus-visible,
+  .dark a:focus-visible,
+  .dark input:focus-visible,
+  .dark textarea:focus-visible,
+  .dark select:focus-visible {
+    outline-color: var(--color-cyan-400);
   }
 }
 
@@ -311,34 +385,65 @@
     text-wrap: pretty;
   }
 
-  /* Glassmorphism - theme aware */
+  /* Glassmorphism - theme aware with fallbacks */
   .glass {
+    /* Fallback for browsers without backdrop-filter support */
+    background: rgb(0 0 0 / 0.08);
+    border: 1px solid rgb(0 0 0 / 0.1);
+    /* Modern browsers with backdrop-filter */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    background: rgb(0 0 0 / 0.05);
-    border: 1px solid rgb(0 0 0 / 0.1);
     transition: background var(--transition-base), border var(--transition-base);
   }
 
+  /* Enhanced fallback for browsers without backdrop-filter */
+  @supports not (backdrop-filter: blur(12px)) {
+    .glass {
+      background: rgb(0 0 0 / 0.1);
+    }
+  }
+
   .dark .glass {
-    background: rgb(255 255 255 / 0.05);
+    background: rgb(255 255 255 / 0.08);
     border: 1px solid rgb(255 255 255 / 0.1);
   }
 
+  @supports not (backdrop-filter: blur(12px)) {
+    .dark .glass {
+      background: rgb(255 255 255 / 0.1);
+    }
+  }
+
   .glass-card {
+    /* Fallback for browsers without backdrop-filter support */
+    background: rgb(0 0 0 / 0.05);
+    border: 1px solid rgb(0 0 0 / 0.08);
+    /* Modern browsers with backdrop-filter */
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    background: rgb(0 0 0 / 0.03);
-    border: 1px solid rgb(0 0 0 / 0.08);
+  }
+
+  @supports not (backdrop-filter: blur(16px)) {
+    .glass-card {
+      background: rgb(0 0 0 / 0.08);
+    }
   }
 
   .dark .glass-card {
-    background: rgb(255 255 255 / 0.03);
+    background: rgb(255 255 255 / 0.05);
     border: 1px solid rgb(255 255 255 / 0.08);
   }
 
-  /* Gradient text */
+  @supports not (backdrop-filter: blur(16px)) {
+    .dark .glass-card {
+      background: rgb(255 255 255 / 0.08);
+    }
+  }
+
+  /* Gradient text with fallbacks */
   .text-gradient-cyan {
+    /* Fallback color for browsers without gradient support */
+    color: var(--color-cyan-500);
     background: linear-gradient(
       135deg,
       var(--color-cyan-400),
@@ -349,7 +454,16 @@
     -webkit-text-fill-color: transparent;
   }
 
+  @supports not (-webkit-background-clip: text) {
+    .text-gradient-cyan {
+      color: var(--color-cyan-500);
+      -webkit-text-fill-color: var(--color-cyan-500);
+    }
+  }
+
   .text-gradient-purple {
+    /* Fallback color for browsers without gradient support */
+    color: var(--color-purple-500);
     background: linear-gradient(
       135deg,
       var(--color-purple-400),
@@ -360,7 +474,16 @@
     -webkit-text-fill-color: transparent;
   }
 
+  @supports not (-webkit-background-clip: text) {
+    .text-gradient-purple {
+      color: var(--color-purple-500);
+      -webkit-text-fill-color: var(--color-purple-500);
+    }
+  }
+
   .text-gradient-cyber {
+    /* Fallback color for browsers without gradient support */
+    color: var(--color-cyan-500);
     background: linear-gradient(
       135deg,
       var(--color-cyan-400),
@@ -369,6 +492,13 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  @supports not (-webkit-background-clip: text) {
+    .text-gradient-cyber {
+      color: var(--color-cyan-500);
+      -webkit-text-fill-color: var(--color-cyan-500);
+    }
   }
 
   /* Glow effects */

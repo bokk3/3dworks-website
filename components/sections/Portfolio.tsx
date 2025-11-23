@@ -98,7 +98,15 @@ export function Portfolio() {
         />
 
         {/* Grid */}
-        <PortfolioGrid projects={filteredProjects} />
+        <PortfolioGrid
+          projects={filteredProjects}
+          onClearFilters={() => {
+            setActiveFilter("all");
+            setSearchQuery("");
+            setMaterialFilter("All Materials");
+            setTechnologyFilter("All Technologies");
+          }}
+        />
       </div>
     </section>
   );
