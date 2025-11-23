@@ -171,8 +171,8 @@ export function ModelViewer({
       ) : (
         <div className="text-center p-6">
           <p className="text-sm text-muted-foreground">
-            {isWebGLSupported === false
-              ? "WebGL not supported on this device."
+            {isWebGLSupported === null
+              ? "Checking WebGL support..."
               : "No 3D model available."}
           </p>
         </div>

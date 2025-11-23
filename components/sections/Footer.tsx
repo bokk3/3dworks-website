@@ -165,9 +165,9 @@ export function Footer() {
             </p>
             <form onSubmit={handleSubmit} className="space-y-3">
               <div className="relative">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
+              <Input
+                type="email"
+                placeholder="Enter your email"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -196,7 +196,7 @@ export function Footer() {
                   </>
                 ) : (
                   <>
-                    Subscribe <ArrowRight size={16} className="ml-2" />
+                Subscribe <ArrowRight size={16} className="ml-2" />
                   </>
                 )}
               </Button>
