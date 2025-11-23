@@ -92,6 +92,9 @@ export const metadata: Metadata = {
   },
 };
 
+import Navbar from "@/components/sections/Navbar";
+import Footer from "@/components/sections/Footer";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -112,7 +115,11 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-grow pt-20">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
