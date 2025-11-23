@@ -16,7 +16,7 @@ const filters = [
   { id: "functional", label: "Functional" },
 ];
 
-export default function PortfolioFilter({
+export function PortfolioFilter({
   activeFilter,
   onFilterChange,
 }: PortfolioFilterProps) {

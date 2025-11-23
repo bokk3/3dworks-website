@@ -10,7 +10,7 @@ interface PortfolioCardProps {
   project: PortfolioItem;
 }
 
-export default function PortfolioCard({ project }: PortfolioCardProps) {
+export function PortfolioCard({ project }: PortfolioCardProps) {
   return (
     <motion.div
       layout

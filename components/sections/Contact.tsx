@@ -10,9 +10,9 @@ import {
   Twitter,
   Linkedin,
 } from "lucide-react";
-import ContactForm from "./Contact/ContactForm";
+import { ContactForm } from "./Contact/ContactForm";
 
-export default function Contact() {
+export function Contact() {
   return (
     <section
       id="contact"

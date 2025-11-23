@@ -2,9 +2,9 @@
 
 import { motion } from "framer-motion";
 import { processSteps } from "@/lib/process-data";
-import ProcessStep from "./Process/ProcessStep";
+import { ProcessStep } from "./Process/ProcessStep";
 
-export default function Process() {
+export function Process() {
   return (
     <section id="process" className="section relative overflow-hidden">
       {/* Background Elements */}

@@ -2,13 +2,13 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { PortfolioItem } from "@/lib/portfolio-data";
-import PortfolioCard from "./PortfolioCard";
+import { PortfolioCard } from "./PortfolioCard";
 
 interface PortfolioGridProps {
   projects: PortfolioItem[];
 }
 
-export default function PortfolioGrid({ projects }: PortfolioGridProps) {
+export function PortfolioGrid({ projects }: PortfolioGridProps) {
   return (
     <motion.div
       layout

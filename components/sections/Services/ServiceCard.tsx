@@ -9,7 +9,7 @@ interface ServiceCardProps {
   index: number;
 }
 
-export default function ServiceCard({ service, index }: ServiceCardProps) {
+export function ServiceCard({ service, index }: ServiceCardProps) {
   const Icon = service.icon;
 
   return (

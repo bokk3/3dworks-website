@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { projects } from "@/lib/portfolio-data";
-import PortfolioFilter from "./Portfolio/PortfolioFilter";
-import PortfolioGrid from "./Portfolio/PortfolioGrid";
+import { PortfolioFilter } from "./Portfolio/PortfolioFilter";
+import { PortfolioGrid } from "./Portfolio/PortfolioGrid";
 
-export default function Portfolio() {
+export function Portfolio() {
   const [activeFilter, setActiveFilter] = useState("all");
 
   const filteredProjects =

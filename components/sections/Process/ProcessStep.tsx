@@ -10,7 +10,7 @@ interface ProcessStepProps {
   isLast: boolean;
 }
 
-export default function ProcessStep({ step, index, isLast }: ProcessStepProps) {
+export function ProcessStep({ step, index, isLast }: ProcessStepProps) {
   const Icon = step.icon;
   const isEven = index % 2 === 0;
 

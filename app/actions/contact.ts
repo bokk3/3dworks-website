@@ -1,18 +1,58 @@
 "use server";
 
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+const ALLOWED_FILE_TYPES = [".stl", ".obj", ".step", ".stp"];
+const MIN_MESSAGE_LENGTH = 20;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export async function submitContactForm(formData: FormData) {
   // Simulate network delay
   await new Promise((resolve) => setTimeout(resolve, 1500));
 
-  const name = formData.get("name");
-  const email = formData.get("email");
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
   const projectType = formData.get("projectType");
-  const message = formData.get("message");
+  const message = formData.get("message") as string;
   const file = formData.get("file") as File | null;
 
   // Server-side validation
-  if (!name || !email || !message) {
-    return { error: "Please fill in all required fields." };
+  if (!name || typeof name !== "string" || !name.trim()) {
+    return { error: "Name is required." };
+  }
+
+  if (!email || typeof email !== "string" || !email.trim()) {
+    return { error: "Email is required." };
+  }
+
+  if (!emailRegex.test(email)) {
+    return { error: "Please enter a valid email address." };
+  }
+
+  if (!message || typeof message !== "string" || !message.trim()) {
+    return { error: "Message is required." };
+  }
+
+  if (message.trim().length < MIN_MESSAGE_LENGTH) {
+    return {
+      error: `Message must be at least ${MIN_MESSAGE_LENGTH} characters long.`,
+    };
+  }
+
+  // File validation
+  if (file && file.size > 0) {
+    const fileExtension =
+      "." + file.name.split(".").pop()?.toLowerCase() || "";
+    if (!ALLOWED_FILE_TYPES.includes(fileExtension)) {
+      return {
+        error: `File type not allowed. Please upload ${ALLOWED_FILE_TYPES.join(", ")} files.`,
+      };
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return {
+        error: `File size must be less than ${MAX_FILE_SIZE / (1024 * 1024)}MB.`,
+      };
+    }
   }
 
   // Log data (mock email sending)

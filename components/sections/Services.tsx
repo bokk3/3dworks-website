@@ -2,9 +2,9 @@
 
 import { motion } from "framer-motion";
 import { services } from "@/lib/services-data";
-import ServiceCard from "./Services/ServiceCard";
+import { ServiceCard } from "./Services/ServiceCard";
 
-export default function Services() {
+export function Services() {
   return (
     <section
       id="services"
