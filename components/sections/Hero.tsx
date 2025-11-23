@@ -6,14 +6,16 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ParallaxElement } from "@/components/effects/ParallaxSection";
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
 
-  // Parallax effects
+  // Enhanced parallax effects with different speeds for depth
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
+  const y3 = useTransform(scrollY, [0, 500], [0, 100]); // Slower background element
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
@@ -26,44 +28,56 @@ export function Hero() {
         {/* Grid Pattern */}
         <div className="absolute inset-0 grid-pattern opacity-[0.03] dark:opacity-[0.05]" />
 
-        {/* Gradient Orbs */}
-        <motion.div
-          style={{ y: y1, opacity }}
-          className="absolute top-20 left-[10%] w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-cyan-500/10"
-        />
-        <motion.div
-          style={{ y: y2, opacity }}
-          className="absolute bottom-20 right-[10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-purple-500/10"
-        />
+        {/* Gradient Orbs with enhanced parallax */}
+        <ParallaxElement speed={0.4} direction="down">
+          <motion.div
+            style={{ opacity }}
+            className="absolute top-20 left-[10%] w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-cyan-500/10 transform-gpu"
+          />
+        </ParallaxElement>
+        <ParallaxElement speed={0.3} direction="up">
+          <motion.div
+            style={{ opacity }}
+            className="absolute bottom-20 right-[10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-purple-500/10 transform-gpu"
+          />
+        </ParallaxElement>
+        {/* Additional depth layer */}
+        <ParallaxElement speed={0.2} direction="down">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-cyan-500/5 to-purple-500/5 rounded-full blur-[150px] transform-gpu" />
+        </ParallaxElement>
       </div>
 
-      {/* Floating 3D Shapes (Decorative) */}
+      {/* Floating 3D Shapes (Decorative) with parallax */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <motion.div
-          animate={{
-            y: [0, -20, 0],
-            rotate: [0, 5, 0],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-1/4 right-[15%] w-24 h-24 border border-cyan-500/20 rounded-xl backdrop-blur-sm hidden lg:block"
-        />
-        <motion.div
-          animate={{
-            y: [0, 30, 0],
-            rotate: [0, -10, 0],
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-          className="absolute bottom-1/3 left-[10%] w-16 h-16 border border-purple-500/20 rounded-lg backdrop-blur-sm hidden lg:block"
-        />
+        <ParallaxElement speed={0.15} direction="down">
+          <motion.div
+            animate={{
+              y: [0, -20, 0],
+              rotate: [0, 5, 0],
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute top-1/4 right-[15%] w-24 h-24 border border-cyan-500/20 rounded-xl backdrop-blur-sm hidden lg:block transform-gpu"
+          />
+        </ParallaxElement>
+        <ParallaxElement speed={0.25} direction="up">
+          <motion.div
+            animate={{
+              y: [0, 30, 0],
+              rotate: [0, -10, 0],
+            }}
+            transition={{
+              duration: 7,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
+            }}
+            className="absolute bottom-1/3 left-[10%] w-16 h-16 border border-purple-500/20 rounded-lg backdrop-blur-sm hidden lg:block transform-gpu"
+          />
+        </ParallaxElement>
       </div>
 
       {/* Content */}

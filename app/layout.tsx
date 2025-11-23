@@ -94,6 +94,7 @@ export const metadata: Metadata = {
 
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
 
 export default function RootLayout({
   children,
@@ -116,6 +117,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased flex flex-col min-h-screen">
+        <ScrollProgress />
         <Navbar />
         <main className="flex-grow pt-20">{children}</main>
         <Footer />

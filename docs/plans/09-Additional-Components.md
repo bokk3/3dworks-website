@@ -5,7 +5,7 @@ Enhance the site with advanced animations and interactions that make
 it feel alive, premium, and engaging. All with modern tech aesthetic.
 
 Tasks:
-Task 1: Parallax Effects
+Task 1: Parallax Effects [x]
 
 Add parallax scrolling:
 - Hero background elements move slower than foreground
@@ -14,7 +14,7 @@ Add parallax scrolling:
 - Create components/effects/ParallaxSection.tsx wrapper
 - Subtle, not distracting (transform-gpu for performance)
 
-Task 2: Magnetic Hover Effects
+Task 2: Magnetic Hover Effects [x]
 
 Add magnetic buttons/cards:
 - CTA buttons that slightly follow cursor on hover
@@ -24,7 +24,7 @@ Add magnetic buttons/cards:
 - Subtle movement (5-10px max, not gimmicky)
 - Cyan glow intensifies on interaction
 
-Task 3: Scroll Progress Indicator
+Task 3: Scroll Progress Indicator [x]
 
 Create components/ui/ScrollProgress.tsx:
 - Thin gradient line at top showing scroll progress
@@ -36,7 +36,7 @@ Create components/ui/ScrollProgress.tsx:
 - Height: 2-3px
 - Blends with theme
 
-Task 4: Page Transitions
+Task 4: Page Transitions [x]
 
 Add smooth transitions:
 - Fade in content on initial page load
@@ -45,7 +45,7 @@ Add smooth transitions:
 - Create components/transitions/PageTransition.tsx
 - Respect prefers-reduced-motion
 
-Task 5: Glassmorphism Hover States
+Task 5: Glassmorphism Hover States [x]
 Enhance all interactive elements:
 - Buttons glow on hover (shadow-cyan-500/50)
 - Cards lift with subtle glow

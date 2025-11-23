@@ -513,7 +513,7 @@
     }
   }
 
-  /* Hover lift effect */
+  /* Hover lift effect - enhanced */
   .hover-lift {
     transition: transform var(--transition-base),
       box-shadow var(--transition-base);
@@ -521,7 +521,13 @@
 
   .hover-lift:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 24px -6px rgb(0 0 0 / 0.2);
+    box-shadow: 0 12px 24px -6px rgb(0 0 0 / 0.2),
+      0 0 20px -5px rgba(6, 182, 212, 0.3);
+  }
+
+  .dark .hover-lift:hover {
+    box-shadow: 0 12px 24px -6px rgb(0 0 0 / 0.4),
+      0 0 20px -5px rgba(6, 182, 212, 0.4);
   }
 
   /* Fade in animation for page loads */
