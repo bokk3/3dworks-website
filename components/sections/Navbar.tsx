@@ -43,6 +43,7 @@ export function Navbar() {
       return;
     }
 
+    const heroSection = document.getElementById("hero");
     const sections = navLinks
       .map((link) => link.sectionId)
       .filter((id) => id !== "hero")
@@ -51,36 +52,69 @@ export function Navbar() {
 
     if (sections.length === 0) return;
 
-    // Create observer
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
+    // Helper function to check if we're in hero section
+    const checkHeroSection = () => {
+      if (!heroSection) return false;
+      const rect = heroSection.getBoundingClientRect();
+      const heroBottom = rect.bottom;
+      // Consider hero active if it's still visible (bottom is below navbar)
+      return heroBottom > NAVBAR_HEIGHT;
+    };
 
-        // If no section is intersecting and we're at the top, set to hero
-        const intersecting = entries.filter((e) => e.isIntersecting);
-        if (intersecting.length === 0 && window.scrollY < 100) {
+    // Create observer for non-hero sections
+    observerRef.current = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]) => {
+        // Check if we're in hero section first
+        if (checkHeroSection()) {
           setActiveSection("hero");
+          return;
+        }
+
+        // Find the section that's most visible in the viewport
+        let mostVisibleEntry: IntersectionObserverEntry | null = null;
+        let maxRatio = 0;
+
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const ratio = entry.intersectionRatio;
+            if (ratio > maxRatio) {
+              maxRatio = ratio;
+              mostVisibleEntry = entry;
+            }
+          }
+        }
+
+        if (mostVisibleEntry) {
+          const target = mostVisibleEntry.target;
+          if (target instanceof HTMLElement && target.id) {
+            setActiveSection(target.id);
+          }
         }
       },
       {
         rootMargin: `-${NAVBAR_HEIGHT}px 0px -50% 0px`,
-        threshold: 0.1,
+        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1.0],
       }
     );
 
-    // Observe all sections
+    // Observe all sections (except hero)
     sections.forEach((section) => {
       if (observerRef.current) {
         observerRef.current.observe(section);
       }
     });
 
+    // Scroll handler to check hero section
+    const handleScroll = () => {
+      if (checkHeroSection()) {
+        setActiveSection("hero");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     // Check initial position
-    if (window.scrollY < 100) {
+    if (window.scrollY < 100 || checkHeroSection()) {
       setActiveSection("hero");
     }
 
@@ -88,6 +122,7 @@ export function Navbar() {
       if (observerRef.current) {
         observerRef.current.disconnect();
       }
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [pathname]);
 

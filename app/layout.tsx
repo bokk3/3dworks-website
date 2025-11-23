@@ -97,17 +97,12 @@ export const metadata: Metadata = {
   },
 };
 
-import dynamic from "next/dynamic";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { SkipToContent } from "@/components/ui/SkipToContent";
-
-// Dynamic import for QuickQuote (heavy component with calculations)
-const QuickQuote = dynamic(() => import("@/components/features/QuickQuote").then((mod) => ({ default: mod.QuickQuote })), {
-  ssr: false, // Client-side only component
-});
+import { QuickQuoteWrapper } from "@/components/features/QuickQuoteWrapper";
 
 export default function RootLayout({
   children,
@@ -158,7 +153,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
-        <QuickQuote />
+        <QuickQuoteWrapper />
         <BackToTop />
       </body>
     </html>
