@@ -1,0 +1,137 @@
+# Development Rules for Gemini - 3Dworks
+
+## Code Generation Standards
+
+### Framework Rules
+- ALWAYS use Next.js 16 App Router (never Pages Router)
+- Default to Server Components; only use 'use client' when needed for:
+  - useState, useEffect, other React hooks
+  - Event handlers (onClick, onChange)
+  - Browser APIs (window, document)
+  - Third-party libraries requiring client-side
+- TypeScript strict mode - no any types
+
+### Styling Rules
+- ONLY use Tailwind utility classes (core utilities, no arbitrary values unless necessary)
+- shadcn/ui components for all UI elements
+- Mobile-first: write sm: md: lg: xl: breakpoints
+- Light mode first, dark mode via dark: prefix (automatically switches on system preference)
+- Light mode: bg-white bg-slate-50 text-slate-900 text-slate-600
+- Dark mode: dark:bg-[#050505] dark:bg-[#0a0a0f] dark:text-white
+- Modern aesthetic with minimal rounding (rounded-sm, rounded-md preferred over rounded-lg)
+- Glassmorphism (theme-aware):
+  - Light: backdrop-blur-md bg-black/5 border border-black/10 shadow-sm
+  - Dark: dark:backdrop-blur-md dark:bg-white/5 dark:border-white/10
+- Consistent spacing: p-4, p-6, p-8, p-12 pattern
+- NO custom CSS files, NO styled-components, NO emotion
+
+### Color System
+**Light Mode (default):**
+- Backgrounds: bg-white bg-slate-50 bg-gray-50
+- Text: text-slate-900 text-slate-600 text-slate-500
+- Borders: border-slate-200 border-slate-300
+- Surface cards: bg-white border border-slate-200 shadow-sm
+- Overlays: bg-black/5 bg-slate-500/10
+
+**Dark Mode (dark: prefix):**
+- Backgrounds: dark:bg-[#050505] dark:bg-[#0a0a0f] dark:bg-zinc-950
+- Text: dark:text-white dark:text-slate-200 dark:text-slate-400
+- Borders: dark:border-white/10 dark:border-slate-800
+- Surface cards: dark:bg-white/5 dark:backdrop-blur-md dark:border-white/10
+- Overlays: dark:bg-white/5 dark:bg-blue-500/10
+
+**Brand Colors (both modes):**
+- Primary: text-cyan-500 bg-cyan-500 border-cyan-500 hover:bg-cyan-600
+- Secondary: text-purple-500 bg-purple-500 border-purple-500
+- Accent: text-cyan-400 bg-cyan-400
+- Success: text-emerald-500 bg-emerald-500
+
+### Component Patterns
+```typescript
+// Server Component (default)
+interface Props {
+  title: string;
+  items: Item[];
+}
+
+export default function Section({ title, items }: Props) {
+  return <div>...</div>;
+}
+
+// Client Component (when needed)
+'use client';
+
+import { useState } from 'react';
+
+export function InteractiveGallery() {
+  const [filter, setFilter] = useState('all');
+  return <div>...</div>;
+}
+```
+
+### Animation Rules
+- Framer Motion for complex animations
+- Use motion.div, motion.section, etc.
+- Simple transitions: transition-all duration-300 ease-out
+- Respect reduced motion: motion-reduce:transition-none
+- Scroll animations: IntersectionObserver or Framer's viewport props
+- 3D transforms: transform-gpu for performance
+
+### File Structure
+```
+/app
+  /page.tsx (homepage)
+  /layout.tsx
+  /globals.css
+  /api
+/components
+  /ui (shadcn)
+  /sections
+    /Hero.tsx
+    /Portfolio.tsx
+    /Services.tsx
+  /shared
+/lib
+  /utils.ts
+  /db.ts
+/public
+  /images
+  /models
+```
+
+### Naming Conventions
+- Components: PascalCase (Hero.tsx, PortfolioCard.tsx)
+- Utils/functions: camelCase (cn, formatDate)
+- Constants: UPPER_SNAKE_CASE
+- CSS classes: kebab-case (only in rare custom CSS)
+
+### Database Patterns
+- Use Server Actions for data mutations
+- Async/await for all DB operations
+- Proper error handling with try/catch
+- Type-safe queries with TypeScript
+
+### What NOT to Do
+- ❌ No localStorage/sessionStorage in initial render (causes hydration issues)
+- ❌ No inline styles (use Tailwind)
+- ❌ No default exports except page.tsx files
+- ❌ No console.logs in production code
+- ❌ No unoptimized images (always use next/image)
+- ❌ No client components when server components work
+- ❌ No excessive border-radius (keep it sharp and modern)
+
+### Quality Checklist
+Before completing any component:
+- [ ] TypeScript types defined
+- [ ] Responsive on all breakpoints
+- [ ] Accessible (ARIA labels, semantic HTML)
+- [ ] Loading/error states handled
+- [ ] Images optimized
+- [ ] Animations smooth (60fps)
+- [ ] Glassmorphism effects applied consistently
+
+### SEO Requirements
+- Metadata in layout.tsx and page.tsx
+- Alt text on all images
+- Semantic HTML (header, main, section, article)
+- Structured data where applicable

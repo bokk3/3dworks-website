@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 3Dworks Specific - SQLite & Uploads
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+/public/uploads/
+/uploads/
+*.stl
+*.obj
+*.step
+
+# Environment
+.env.local
+.env.production.local
