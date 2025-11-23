@@ -1,6 +1,6 @@
 # Multi-stage Dockerfile for 3Dworks Website
 # Build stage
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
