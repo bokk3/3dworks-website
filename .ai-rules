@@ -25,6 +25,13 @@
 - Consistent spacing: p-4, p-6, p-8, p-12 pattern
 - NO custom CSS files, NO styled-components, NO emotion
 
+## Tailwind v4 Utilities
+- Use custom utilities: `.glass-card`, `.text-gradient-cyber`, `.hover-glow-cyan`
+- Grid patterns: `.grid-pattern`, `.dot-pattern` for backgrounds
+- 3D effects: `.card-3d` for interactive cards
+- Neon borders: `.neon-border-cyan` for tech aesthetic
+- Colors: Use `cyan-*`, `purple-*`, `emerald-*` from theme
+
 ### Color System
 **Light Mode (default):**
 - Backgrounds: bg-white bg-slate-50 bg-gray-50
