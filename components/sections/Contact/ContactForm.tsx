@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { analytics } from "@/lib/analytics";
 
 interface ValidationErrors {
   name?: string;
@@ -234,6 +235,11 @@ export function ContactForm() {
 
     files.forEach((file) => {
       formDataToSend.append("files", file);
+      // Track file upload
+      analytics.trackFileUpload(
+        file.name.split(".").pop() || "unknown",
+        file.size
+      );
     });
 
     try {
@@ -242,6 +248,10 @@ export function ContactForm() {
       if (result.error) {
         setError(result.error);
       } else {
+        // Track form submission
+        const formType =
+          formData.projectType === "quote" ? "quote" : "contact";
+        analytics.trackFormSubmission(formType);
         setSuccess(result.success || "Message sent successfully! We'll get back to you soon.");
         formRef.current?.reset();
         setFiles([]);

@@ -7,6 +7,7 @@ import { ArrowRight, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ParallaxElement } from "@/components/effects/ParallaxSection";
+import { analytics } from "@/lib/analytics";
 // import { VideoBackground } from "@/components/media/VideoBackground";
 
 export function Hero() {
@@ -137,7 +138,10 @@ export function Hero() {
               className="h-12 px-8 text-base bg-cyan-500 hover:bg-cyan-600 text-white shadow-lg shadow-cyan-500/20 hover-glow-cyan min-w-[160px]"
               asChild
             >
-              <Link href="/portfolio">
+              <Link
+                href="/portfolio"
+                onClick={() => analytics.trackCTAClick("Explore Portfolio", "hero")}
+              >
                 Explore Portfolio <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -148,7 +152,10 @@ export function Hero() {
               className="h-12 px-8 text-base border-slate-200 hover:bg-slate-100 text-slate-700 dark:border-white/10 dark:text-white dark:hover:bg-white/5 dark:hover:border-cyan-500/50 min-w-[160px]"
               asChild
             >
-              <Link href="/quote">
+              <Link
+                href="/quote"
+                onClick={() => analytics.trackCTAClick("Upload Design", "hero")}
+              >
                 <Upload className="mr-2 h-4 w-4" /> Upload Design
               </Link>
             </Button>

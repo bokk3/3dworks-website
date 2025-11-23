@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { analytics } from "@/lib/analytics";
 
 const navLinks = [
   { name: "Home", href: "/", sectionId: "hero" },
@@ -167,6 +168,7 @@ export function Navbar() {
               className="bg-cyan-500 hover:bg-cyan-600 text-white border-none hover-glow-cyan transition-all duration-300"
               size="sm"
               onClick={() => {
+                analytics.trackCTAClick("Get Started", "navbar");
                 const contactSection = document.getElementById("contact");
                 if (contactSection && pathname === "/") {
                   const elementPosition = contactSection.getBoundingClientRect().top;
@@ -238,6 +240,7 @@ export function Navbar() {
                 <Button
                   className="w-full bg-cyan-500 hover:bg-cyan-600 text-white h-12 text-lg hover-glow-cyan"
                   onClick={() => {
+                    analytics.trackCTAClick("Get Started", "mobile_menu");
                     const contactSection = document.getElementById("contact");
                     if (contactSection && pathname === "/") {
                       const elementPosition = contactSection.getBoundingClientRect().top;

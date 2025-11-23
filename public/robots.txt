@@ -1,0 +1,11 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://3dworks.truyens.pro/sitemap.xml
+
+# Disallow admin and private areas (if any)
+Disallow: /api/
+Disallow: /_next/
+

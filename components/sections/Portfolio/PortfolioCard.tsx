@@ -8,6 +8,7 @@ import { Clock, Box, ArrowUpRight } from "lucide-react";
 import { PortfolioItem } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
 import { MagneticCard } from "@/components/effects/MagneticCard";
+import { analytics } from "@/lib/analytics";
 
 // Dynamic import for PortfolioModal (heavy component with carousel)
 const PortfolioModal = dynamic(() => import("./PortfolioModal").then((mod) => ({ default: mod.PortfolioModal })), {
@@ -31,7 +32,10 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.3 }}
           className="group relative rounded-xl overflow-hidden glass-card hover-lift cursor-pointer"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            analytics.trackPortfolioClick(project.id, project.title);
+            setIsModalOpen(true);
+          }}
         >
       {/* Image Container */}
       <div className="relative aspect-[4/3] overflow-hidden">

@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { subscribeNewsletter } from "@/app/actions/newsletter";
 import { cn } from "@/lib/utils";
+import { analytics } from "@/lib/analytics";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -58,6 +59,7 @@ export function Footer() {
       if (result.error) {
         setError(result.error);
       } else {
+        analytics.trackNewsletterSignup();
         setSuccess(true);
         setEmail("");
         // Reset success message after 5 seconds

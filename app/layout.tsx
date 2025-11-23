@@ -25,11 +25,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "3Dworks - Precision 3D Printing Services",
+    default: "3Dworks - Precision 3D Printing Services | Rapid Prototyping & Custom Manufacturing",
     template: "%s | 3Dworks",
   },
   description:
-    "From rapid prototyping to custom manufacturing - we bring your ideas to life with cutting-edge 3D printing technology. Professional 3D printing services for aerospace, automotive, medical, and consumer products.",
+    "Professional 3D printing services for rapid prototyping and custom manufacturing. Precision parts for aerospace, automotive, medical, and consumer industries. Fast turnaround, high-quality materials, expert design support.",
   keywords: [
     "3D printing",
     "rapid prototyping",
@@ -52,27 +52,32 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL("https://3dworks.truyens.pro/"),
   openGraph: {
-    title: "3Dworks - Precision 3D Printing Services",
+    title: "3Dworks - Precision 3D Printing Services | Rapid Prototyping & Custom Manufacturing",
     description:
-      "From rapid prototyping to custom manufacturing - we bring your ideas to life with cutting-edge 3D printing technology.",
+      "Professional 3D printing services for rapid prototyping and custom manufacturing. Precision parts for aerospace, automotive, medical, and consumer industries. Fast turnaround, high-quality materials, expert design support.",
     type: "website",
     locale: "en_US",
     siteName: "3Dworks",
+    url: "https://3dworks.truyens.pro",
     images: [
       {
-        url: "/og-image.png", // Add this image to your public folder
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "3Dworks - Precision 3D Printing",
+        alt: "3Dworks - Precision 3D Printing Services",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "3Dworks - Precision 3D Printing Services",
+    title: "3Dworks - Precision 3D Printing Services | Rapid Prototyping & Custom Manufacturing",
     description:
-      "From rapid prototyping to custom manufacturing - we bring your ideas to life with cutting-edge 3D printing technology.",
+      "Professional 3D printing services for rapid prototyping and custom manufacturing. Precision parts for aerospace, automotive, medical, and consumer industries.",
     images: ["/og-image.png"],
+    creator: "@3dworks",
+  },
+  alternates: {
+    canonical: "https://3dworks.truyens.pro",
   },
   robots: {
     index: true,
@@ -123,6 +128,27 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        {/* Google Analytics 4 */}
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
+                    page_path: window.location.pathname,
+                  });
+                `,
+              }}
+            />
+          </>
+        )}
       </head>
       <body className="antialiased flex flex-col min-h-screen">
         <SkipToContent />

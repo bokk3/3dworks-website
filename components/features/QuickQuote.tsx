@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { analytics } from "@/lib/analytics";
 
 const materials = [
   { value: "pla", label: "PLA", basePrice: 0.05 },
@@ -272,7 +273,13 @@ export function QuickQuote() {
                       asChild
                       className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
                     >
-                      <Link href="#contact" onClick={() => setIsOpen(false)}>
+                      <Link
+                        href="#contact"
+                        onClick={() => {
+                          analytics.trackCTAClick("Request Detailed Quote", "quick_quote");
+                          setIsOpen(false);
+                        }}
+                      >
                         Request Detailed Quote <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
