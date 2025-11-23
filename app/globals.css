@@ -89,13 +89,7 @@
   --font-size-7xl: 4.5rem;
   --font-size-8xl: 6rem;
 
-  /* ===== SPACING ===== */
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 1.5rem;
-  --spacing-lg: 2rem;
-  --spacing-xl: 3rem;
-  --spacing-2xl: 4rem;
+  /* ===== SPACING - Using Tailwind defaults ===== */
 
   /* ===== RADIUS (shadcn + custom) ===== */
   --radius-sm: calc(var(--radius) - 4px);
@@ -202,6 +196,21 @@
 }
 
 @layer base {
+  /* ⭐ ADD THIS FIRST - CSS Reset */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    height: 100%;
+    line-height: 1.5; /* ✅ Critical - prevents squashing */
+  }
+
   /* Shadcn defaults */
   * {
     @apply border-border outline-ring/50;
