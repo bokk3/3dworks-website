@@ -1,11 +1,13 @@
 "use client";
 
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote/rsc";
+import { MDXRemote } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
 import { BlogPost } from "@/lib/blog-data";
 import { format } from "date-fns";
 import { Calendar, Clock, User, Tag } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 interface BlogPostProps {
   post: BlogPost;
@@ -59,6 +61,12 @@ const components = {
 };
 
 export function BlogPostContent({ post }: BlogPostProps) {
+  const [mdxSource, setMdxSource] = useState<any>(null);
+
+  useEffect(() => {
+    serialize(post.content).then(setMdxSource);
+  }, [post.content]);
+
   return (
     <article className="max-w-4xl mx-auto">
       {/* Header Image */}
@@ -125,7 +133,13 @@ export function BlogPostContent({ post }: BlogPostProps) {
 
       {/* Content */}
       <div className="prose prose-slate dark:prose-invert max-w-none">
-        <MDXRemote source={post.content} components={components} />
+        {mdxSource ? (
+          <MDXRemote {...mdxSource} components={components} />
+        ) : (
+          <div className="flex items-center justify-center py-8">
+            <div className="animate-spin h-8 w-8 border-2 border-cyan-500 border-t-transparent rounded-full" />
+          </div>
+        )}
       </div>
     </article>
   );

@@ -6,6 +6,7 @@ import { OrbitControls, PerspectiveCamera, Environment, Grid } from "@react-thre
 import { Loader2, Maximize2, Minimize2, Download, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ImageSkeleton } from "@/components/ui/ImageSkeleton";
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
