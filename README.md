@@ -36,6 +36,7 @@ npm run dev  # Open http://localhost:3000
 
 ### Docker
 
+#### Local Development (Build from source)
 ```bash
 # Build and run with Docker Compose
 docker-compose up -d
@@ -43,6 +44,25 @@ docker-compose up -d
 # Or build manually
 docker build -t 3dworks-web:latest .
 docker run -p 3000:3000 3dworks-web:latest
+```
+
+#### Production (Pull from Docker Hub)
+```bash
+# Set your Docker Hub username
+export DOCKERHUB_USERNAME=yourusername
+
+# Pull and run latest image from Docker Hub
+docker-compose -f docker-compose.prod.yml up -d
+
+# Or manually pull and run
+docker pull ${DOCKERHUB_USERNAME}/3dworks-web:latest
+docker run -d -p 3000:3000 \
+  -e NEXT_PUBLIC_BASE_URL=https://yourdomain.com \
+  -e ADMIN_PASSWORD=your-secure-password \
+  -v $(pwd)/data:/app/data \
+  --name 3dworks-web \
+  --restart unless-stopped \
+  ${DOCKERHUB_USERNAME}/3dworks-web:latest
 ```
 
 ### Production Deployment

@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  3d-web:
+    image: 3bok/3dworks-web:latest
+    container_name: 3dworks-web
+    ports:
+      - "3008:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_BASE_URL=https://3dworks.truyens.pro
+      - NEXT_PUBLIC_GA_MEASUREMENT_ID=
+      - ADMIN_PASSWORD=admin123
+    volumes:
+      # Persist SQLite database (if using)
+      - ./data-3d:/app/data
+      # Persist uploaded files (if needed)
+      - ./uploads-3d:/app/uploads
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    # Pull latest image before starting
+    pull_policy: always
+    networks:
+      - rein-staging-network
+
+networks:
+  rein-staging-network:
+    external: true
+

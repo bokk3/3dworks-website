@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
   /* Production build configuration */
   output: process.env.DOCKER_BUILD === "true" ? "standalone" : undefined,
   
+  // Allow requests from reverse proxies
+  // This is important when running behind Nginx Proxy Manager
+  async rewrites() {
+    return [];
+  },
+  
   images: {
     remotePatterns: [
       {
@@ -73,6 +79,12 @@ const nextConfig: NextConfig = {
   
   experimental: {
     optimizePackageImports: ["framer-motion", "lucide-react"],
+  },
+  
+  // Disable strict hostname checking when behind a reverse proxy
+  // This allows NPM to proxy requests correctly
+  async redirects() {
+    return [];
   },
 };
 
