@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getBlogPost, blogPosts } from "@/lib/blog-data";
-import { BlogPostContent } from "@/components/blog/BlogPostContent";
+import { BlogPostContent } from "@/components/blog/BlogPost";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
