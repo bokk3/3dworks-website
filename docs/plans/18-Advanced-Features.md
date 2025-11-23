@@ -5,43 +5,43 @@ Optional advanced features to enhance 3Dworks with blog, 3D viewer,
 quote calculator, and other premium functionality for V1.5.
 
 Tasks:
-Task 1: Blog/Knowledge Base
+- [x] Task 1: Blog/Knowledge Base
 
 Add blog section for 3D printing content:
-- Create /blog route with app router
-- MDX support for rich content (code blocks, images, 3D embeds)
-- Blog posts about:
+- [x] Create /blog route with app router
+- [x] MDX support for rich content (code blocks, images, 3D embeds)
+- [x] Blog posts about:
   * 3D printing tips and techniques
   * Material comparisons
   * Case studies of completed projects
   * Industry news and trends
-- Category filtering (Materials, Techniques, Case Studies, News)
-- Tag system
-- Search functionality
-- RSS feed generation
-- Glassmorphism card design for blog posts (theme-aware):
+- [x] Category filtering (Materials, Techniques, Case Studies, News)
+- [x] Tag system
+- [x] Search functionality
+- [x] RSS feed generation
+- [x] Glassmorphism card design for blog posts (theme-aware):
   * Light: bg-white border border-slate-200 shadow-md hover:shadow-lg
   * Dark: dark:bg-white/5 dark:backdrop-blur-md dark:border-white/10
-- Author profiles
+- [x] Author profiles
 
-Task 2: Interactive 3D Model Viewer
+- [x] Task 2: Interactive 3D Model Viewer
 
 Full 3D model viewer implementation:
-- Use @react-three/fiber + @react-three/drei
-- Upload and view STL/OBJ files in browser
-- Interactive controls (rotate, zoom, pan)
-- Measurement tools
-- Layer-by-layer preview
-- Material preview (show different materials on model)
-- Export screenshots
-- Fullscreen mode
-- Performance optimized (lazy load Three.js)
-- Fallback for browsers without WebGL
+- [x] Use @react-three/fiber + @react-three/drei
+- [x] Upload and view STL/OBJ files in browser
+- [x] Interactive controls (rotate, zoom, pan)
+- [x] Measurement tools
+- [x] Layer-by-layer preview
+- [x] Material preview (show different materials on model)
+- [x] Export screenshots
+- [x] Fullscreen mode
+- [x] Performance optimized (lazy load Three.js)
+- [x] Fallback for browsers without WebGL
 
-Task 3: Advanced Quote Calculator
+- [x] Task 3: Advanced Quote Calculator
 
 Interactive quote estimation tool:
-- Comprehensive quote form:
+- [x] Comprehensive quote form:
   * 3D file upload with auto-dimension reading
   * Manual dimension input (L × W × H in mm/cm)
   * Material selection (PLA, ABS, PETG, Resin, Nylon, etc.)
@@ -50,37 +50,29 @@ Interactive quote estimation tool:
   * Quantity input
   * Finish options (as-printed, sanded, painted)
   * Rush delivery option
-- Real-time price calculation algorithm
-- Price breakdown (material, time, finishing, shipping)
-- "Request Official Quote" button
-- Save quote to user account (if logged in)
-- Generate PDF quote
-- Email quote to customer
+- [x] Real-time price calculation algorithm
+- [x] Price breakdown (material, time, finishing, shipping)
+- [x] "Request Official Quote" button
+- [x] Save quote to user account (if logged in)
+- [x] Generate PDF quote
+- [x] Email quote to customer
 
-Task 4: Customer Portal (Advanced)
-
-User authentication and project management:
-- NextAuth.js integration
-- Customer login/signup
-- Project dashboard
-- Upload history
-- Quote history
-- Track order status
-- Reorder previous projects
-- Save favorite materials/settings
-- Glassmorphism dashboard design (theme-aware):
-  * Light: bg-slate-50 with white cards (border border-slate-200)
-  * Dark: dark:bg-[#050505] with dark:bg-white/5 cards
-
-Task 5: Material Comparison Tool
+- [x] Task 4: Material Comparison Tool
 
 Interactive material selector:
-- Side-by-side material comparison
-- Properties table (strength, flexibility, temperature resistance)
-- Use case recommendations
-- Cost comparison
-- Print time estimates
-- Visual samples
-- Filter by properties
-- "Best for your project" wizard
+- [x] Side-by-side material comparison
+- [x] Properties table (strength, flexibility, temperature resistance)
+- [x] Use case recommendations
+- [x] Cost comparison
+- [x] Print time estimates
+- [x] Visual samples
+- [x] Filter by properties
+- [x] "Best for your project" wizard
+
+- [x] Task 5: Add admin page with basic password protection.
+
+Secure Admin page for messages and quotes:
+- [x] No seperate /login route, /admin page asks for password and then displays content.
+- [x] Non-complicated layout, just a section for messages overview and a received quotes component.
+- [x] Mark messages and quotes as 'replied' option
 

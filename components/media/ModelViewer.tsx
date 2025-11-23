@@ -1,10 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Loader2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ImageSkeleton } from "@/components/ui/ImageSkeleton";
+
+// Dynamic import for 3D viewer (heavy component)
+const ModelViewer3D = dynamic(
+  () => import("./ModelViewer3D").then((mod) => ({ default: mod.ModelViewer3D })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-full">
+        <Loader2 className="h-8 w-8 animate-spin text-cyan-500" />
+      </div>
+    ),
+  }
+);
 
 interface ModelViewerProps {
   modelUrl?: string;
@@ -92,8 +106,19 @@ export function ModelViewer({
     );
   }
 
-  // Placeholder for future Three.js integration
-  // This can be enhanced later with @react-three/fiber
+  // Use 3D viewer if model URL is provided and WebGL is supported
+  if (modelUrl && isWebGLSupported) {
+    return (
+      <ModelViewer3D
+        modelUrl={modelUrl}
+        fallbackImage={fallbackImage}
+        className={className}
+        alt={alt}
+      />
+    );
+  }
+
+  // Fallback to image if no model URL or WebGL not supported
   return (
     <div
       className={cn(
@@ -126,31 +151,30 @@ export function ModelViewer({
             />
           )}
         </div>
+      ) : fallbackImage ? (
+        <div className="relative w-full h-full">
+          <Image
+            src={fallbackImage}
+            alt={alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            quality={85}
+            loading="lazy"
+            onLoad={() => setIsLoading(false)}
+            onError={() => {
+              setIsLoading(false);
+              setHasError(true);
+            }}
+          />
+        </div>
       ) : (
         <div className="text-center p-6">
-          <Loader2 className="mx-auto mb-2 text-cyan-500 animate-spin" size={24} />
-          <p className="text-sm text-muted-foreground mb-2">
-            3D Model Viewer
+          <p className="text-sm text-muted-foreground">
+            {isWebGLSupported === false
+              ? "WebGL not supported on this device."
+              : "No 3D model available."}
           </p>
-          <p className="text-xs text-muted-foreground">
-            Three.js integration coming soon
-          </p>
-          {fallbackImage && (
-            <div className="mt-4 relative w-32 h-32 mx-auto rounded-md overflow-hidden">
-              <Image
-                src={fallbackImage}
-                alt={alt}
-                fill
-                className="object-cover"
-                sizes="128px"
-                onLoad={() => setIsLoading(false)}
-                onError={() => {
-                  setIsLoading(false);
-                  setHasError(true);
-                }}
-              />
-            </div>
-          )}
         </div>
       )}
     </div>
