@@ -26,11 +26,11 @@ Required secrets:
 
 ### 3. Workflow Triggers
 
-The workflow runs on:
+The workflow runs **only** on:
 
-- **Push to main branch**: Builds and tags as `latest`
-- **Git tags** (e.g., `v1.0.0`): Builds and tags with version numbers
-- **Manual trigger**: Can be triggered manually from GitHub Actions tab
+- **Git tags** matching pattern `v*.*.*` (e.g., `v1.0.0`, `v1.5.2`): Builds and tags with version numbers
+
+**Note**: The workflow does NOT run on pushes to branches. Only version tags trigger builds.
 
 ### 4. Multi-Architecture Support
 
@@ -41,14 +41,7 @@ Builds for:
 
 ### 5. Image Tags
 
-The workflow automatically creates tags based on triggers:
-
-**On main branch push:**
-
-```
-yourusername/3dworks-web:latest
-yourusername/3dworks-web:main-<git-sha>
-```
+The workflow automatically creates tags based on version tags:
 
 **On version tag (e.g., v1.5.0):**
 
