@@ -611,7 +611,7 @@ export function ContactForm() {
         >
           {isLoading ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...
+              <Loader2 className="mr-2 h-4 w-4 animate-spin text-white" /> Sending...
             </>
           ) : (
             <>

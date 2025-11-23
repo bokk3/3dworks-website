@@ -1,23 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "Portfolio", href: "/portfolio" },
-  { name: "Services", href: "/services" },
-  { name: "Technology", href: "/technology" },
-  { name: "Contact", href: "/contact" },
+  { name: "Home", href: "/", sectionId: "hero" },
+  { name: "Portfolio", href: "#portfolio", sectionId: "portfolio" },
+  { name: "Services", href: "#services", sectionId: "services" },
+  { name: "About", href: "#about", sectionId: "about" },
+  { name: "Contact", href: "#contact", sectionId: "contact" },
 ];
+
+const NAVBAR_HEIGHT = 80; // Offset for fixed navbar
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("");
+  const pathname = usePathname();
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Handle scroll effect
   useEffect(() => {
@@ -27,6 +33,82 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Intersection Observer for active section detection
+  useEffect(() => {
+    // Only run on homepage
+    if (pathname !== "/") {
+      setActiveSection("");
+      return;
+    }
+
+    const sections = navLinks
+      .map((link) => link.sectionId)
+      .filter((id) => id !== "hero")
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+
+    if (sections.length === 0) return;
+
+    // Create observer
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+
+        // If no section is intersecting and we're at the top, set to hero
+        const intersecting = entries.filter((e) => e.isIntersecting);
+        if (intersecting.length === 0 && window.scrollY < 100) {
+          setActiveSection("hero");
+        }
+      },
+      {
+        rootMargin: `-${NAVBAR_HEIGHT}px 0px -50% 0px`,
+        threshold: 0.1,
+      }
+    );
+
+    // Observe all sections
+    sections.forEach((section) => {
+      if (observerRef.current) {
+        observerRef.current.observe(section);
+      }
+    });
+
+    // Check initial position
+    if (window.scrollY < 100) {
+      setActiveSection("hero");
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [pathname]);
+
+  // Smooth scroll handler
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("#") && pathname === "/") {
+      e.preventDefault();
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - NAVBAR_HEIGHT;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    }
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <>
@@ -52,16 +134,31 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-cyan-500 transition-colors relative group"
-              >
-                {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 transition-all duration-300 group-hover:w-full" />
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isActive =
+                pathname === "/" && activeSection === link.sectionId;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={cn(
+                    "text-sm font-medium transition-colors relative group",
+                    isActive
+                      ? "text-cyan-500"
+                      : "text-muted-foreground hover:text-cyan-500"
+                  )}
+                >
+                  {link.name}
+                  <span
+                    className={cn(
+                      "absolute -bottom-1 left-0 h-0.5 bg-cyan-500 transition-all duration-300",
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    )}
+                  />
+                </Link>
+              );
+            })}
           </nav>
 
           {/* CTA Button */}
@@ -69,6 +166,17 @@ export function Navbar() {
             <Button
               className="bg-cyan-500 hover:bg-cyan-600 text-white border-none hover-glow-cyan transition-all duration-300"
               size="sm"
+              onClick={() => {
+                const contactSection = document.getElementById("contact");
+                if (contactSection && pathname === "/") {
+                  const elementPosition = contactSection.getBoundingClientRect().top;
+                  const offsetPosition = elementPosition + window.pageYOffset - NAVBAR_HEIGHT;
+                  window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth",
+                  });
+                }
+              }}
             >
               Get Started
             </Button>
@@ -105,8 +213,16 @@ export function Navbar() {
                 >
                   <Link
                     href={link.href}
-                    className="flex items-center justify-between text-2xl font-display font-medium text-foreground hover:text-cyan-500 transition-colors py-2 border-b border-border/50"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={(e) => {
+                      handleNavClick(e, link.href);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={cn(
+                      "flex items-center justify-between text-2xl font-display font-medium transition-colors py-2 border-b border-border/50",
+                      pathname === "/" && activeSection === link.sectionId
+                        ? "text-cyan-500"
+                        : "text-foreground hover:text-cyan-500"
+                    )}
                   >
                     {link.name}
                     <ChevronRight size={20} className="text-muted-foreground" />
@@ -121,7 +237,18 @@ export function Navbar() {
               >
                 <Button
                   className="w-full bg-cyan-500 hover:bg-cyan-600 text-white h-12 text-lg hover-glow-cyan"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => {
+                    const contactSection = document.getElementById("contact");
+                    if (contactSection && pathname === "/") {
+                      const elementPosition = contactSection.getBoundingClientRect().top;
+                      const offsetPosition = elementPosition + window.pageYOffset - NAVBAR_HEIGHT;
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth",
+                      });
+                    }
+                    setIsMobileMenuOpen(false);
+                  }}
                 >
                   Get Started
                 </Button>

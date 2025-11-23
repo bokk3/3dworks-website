@@ -96,6 +96,8 @@ import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { QuickQuote } from "@/components/features/QuickQuote";
+import { BackToTop } from "@/components/ui/BackToTop";
+import { SkipToContent } from "@/components/ui/SkipToContent";
 
 export default function RootLayout({
   children,
@@ -118,11 +120,15 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased flex flex-col min-h-screen">
+        <SkipToContent />
         <ScrollProgress />
         <Navbar />
-        <main className="flex-grow pt-20">{children}</main>
+        <main id="main-content" className="flex-grow pt-20" tabIndex={-1}>
+          {children}
+        </main>
         <Footer />
         <QuickQuote />
+        <BackToTop />
       </body>
     </html>
   );
