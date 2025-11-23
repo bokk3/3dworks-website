@@ -23,16 +23,16 @@ export function ServiceCard({ service, index }: ServiceCardProps) {
         className="group relative p-8 rounded-xl glass-card hover-lift overflow-hidden"
       >
       {/* Gradient Glow Effect on Hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       {/* Icon */}
-      <div className="relative mb-6 inline-flex p-3 rounded-lg bg-cyan-500/10 text-cyan-500 group-hover:bg-cyan-500 group-hover:text-white transition-colors duration-300">
+      <div className="relative mb-6 inline-flex p-3 rounded-lg bg-orange-500/10 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
         <Icon size={32} strokeWidth={1.5} />
       </div>
 
       {/* Content */}
       <div className="relative z-10">
-        <h3 className="text-xl font-display font-bold mb-3 group-hover:text-cyan-500 transition-colors">
+        <h3 className="text-xl font-display font-bold mb-3 group-hover:text-orange-500 transition-colors">
           {service.title}
         </h3>
 
@@ -47,7 +47,7 @@ export function ServiceCard({ service, index }: ServiceCardProps) {
               key={i}
               className="flex items-center gap-2 text-sm text-muted-foreground/80"
             >
-              <Check size={14} className="text-cyan-500" />
+              <Check size={14} className="text-orange-500" />
               <span>{spec}</span>
             </li>
           ))}

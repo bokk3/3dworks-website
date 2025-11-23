@@ -4,7 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Clock, Box, ArrowUpRight } from "lucide-react";
+import { Clock, Box, ArrowUpRight, Boxes } from "lucide-react";
 import { PortfolioItem } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
 import { MagneticCard } from "@/components/effects/MagneticCard";
@@ -72,7 +72,7 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
 
       {/* Content */}
       <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-        <h3 className="text-xl font-display font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
+        <h3 className="text-xl font-display font-bold text-white mb-2 group-hover:text-orange-400 transition-colors">
           {project.title}
         </h3>
 
@@ -83,18 +83,35 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
         {/* Specs */}
         <div className="flex items-center gap-4 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
           <div className="flex items-center gap-1.5">
-            <Box size={14} className="text-cyan-500" />
+            <Box size={14} className="text-orange-500" />
             <span>{project.material}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Clock size={14} className="text-purple-500" />
+            <Clock size={14} className="text-amber-500" />
             <span>{project.printTime}</span>
           </div>
         </div>
 
+        {/* View 3D Model Button */}
+        {project.model3dUrl && (
+          <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-150">
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                analytics.trackCTAClick("View 3D Model", "portfolio_card");
+                setIsModalOpen(true);
+              }}
+              className="px-3 py-1.5 text-xs font-medium text-white bg-orange-500/90 hover:bg-orange-500 rounded-md backdrop-blur-md border border-white/20 flex items-center gap-1.5 transition-colors"
+            >
+              <Boxes size={14} />
+              View 3D Model
+            </motion.button>
+          </div>
+        )}
+
         {/* Arrow Icon */}
         <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-          <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-cyan-500 hover:text-white transition-colors">
+          <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-orange-500 hover:text-white transition-colors">
             <ArrowUpRight size={16} />
           </div>
         </div>

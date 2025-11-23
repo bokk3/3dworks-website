@@ -95,20 +95,23 @@ export function QuickQuote() {
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        whileHover={{ scale: 1.05 }}
+        whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(true)}
         className={cn(
-          "fixed bottom-6 right-6 z-40",
-          "w-14 h-14 rounded-full",
-          "bg-cyan-500 hover:bg-cyan-600 text-white",
-          "shadow-lg shadow-cyan-500/30",
+          "fixed bottom-6 right-6 z-[60]",
+          "w-16 h-16 rounded-full",
+          "bg-orange-500 hover:bg-orange-600 text-white",
+          "shadow-xl shadow-orange-500/40",
           "flex items-center justify-center",
-          "transition-colors"
+          "transition-all duration-300",
+          "animate-pulse-glow",
+          "group"
         )}
         aria-label="Quick Quote Calculator"
+        title="Get a quick quote estimate"
       >
-        <Calculator size={24} />
+        <Calculator size={28} className="group-hover:scale-110 transition-transform" />
       </motion.button>
 
       {/* Slide-in Panel */}
@@ -121,7 +124,7 @@ export function QuickQuote() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[55]"
             />
 
             {/* Panel */}
@@ -131,7 +134,7 @@ export function QuickQuote() {
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
               className={cn(
-                "fixed top-0 right-0 bottom-0 z-50",
+                "fixed top-0 right-0 bottom-0 z-[60]",
                 "w-full max-w-md",
                 "bg-white dark:bg-zinc-900/95",
                 "backdrop-blur-xl",
@@ -237,7 +240,7 @@ export function QuickQuote() {
                       id="rush"
                       checked={quoteData.rush}
                       onChange={(e) => handleInputChange("rush", e.target.checked)}
-                      className="w-4 h-4 rounded border-slate-300 text-cyan-500 focus:ring-cyan-500"
+                      className="w-4 h-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500"
                     />
                     <Label htmlFor="rush" className="cursor-pointer">
                       Rush delivery (50% surcharge)
@@ -251,13 +254,13 @@ export function QuickQuote() {
                       animate={{ opacity: 1, y: 0 }}
                       className={cn(
                         "p-4 rounded-md",
-                        "bg-gradient-to-br from-cyan-500/10 to-purple-500/10",
-                        "border border-cyan-500/20"
+                        "bg-gradient-to-br from-orange-500/10 to-amber-500/10",
+                        "border border-orange-500/20"
                       )}
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium">Estimated Price:</span>
-                        <span className="text-2xl font-display font-bold text-cyan-500">
+                        <span className="text-2xl font-display font-bold text-orange-500">
                           ${estimatedPrice}
                         </span>
                       </div>
@@ -271,7 +274,7 @@ export function QuickQuote() {
                   <div className="pt-4 space-y-3">
                     <Button
                       asChild
-                      className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
+                      className="w-full bg-orange-500 hover:bg-orange-600 text-white"
                     >
                       <Link
                         href="#contact"

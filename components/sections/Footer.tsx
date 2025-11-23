@@ -79,7 +79,7 @@ export function Footer() {
           {/* Brand Column */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-md flex items-center justify-center text-white font-bold text-xl shadow-md">
+              <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-amber-600 rounded-md flex items-center justify-center text-white font-bold text-xl shadow-md">
                 3D
               </div>
               <span className="font-display font-bold text-xl tracking-tight text-foreground">
@@ -95,7 +95,7 @@ export function Footer() {
                 <a
                   key={i}
                   href="#"
-                  className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:text-cyan-500 hover:border-cyan-500 hover:shadow-glow-cyan transition-all duration-300"
+                  className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:text-orange-500 hover:border-orange-500 hover:shadow-glow-orange transition-all duration-300"
                 >
                   <Icon size={16} />
                 </a>
@@ -120,9 +120,9 @@ export function Footer() {
                 <li key={item}>
                   <Link
                     href={`/${item.toLowerCase().replace(/ /g, "-")}`}
-                    className="text-muted-foreground hover:text-cyan-500 transition-colors text-sm flex items-center gap-2 group"
+                    className="text-muted-foreground hover:text-orange-500 transition-colors text-sm flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 rounded-full bg-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="w-1 h-1 rounded-full bg-orange-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                     {item}
                   </Link>
                 </li>
@@ -137,7 +137,7 @@ export function Footer() {
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-sm text-muted-foreground">
-                <MapPin size={18} className="text-cyan-500 shrink-0 mt-0.5" />
+                <MapPin size={18} className="text-orange-500 shrink-0 mt-0.5" />
                 <span>
                   123 Innovation Drive,
                   <br />
@@ -145,11 +145,11 @@ export function Footer() {
                 </span>
               </li>
               <li className="flex items-center gap-3 text-sm text-muted-foreground">
-                <Phone size={18} className="text-cyan-500 shrink-0" />
+                <Phone size={18} className="text-orange-500 shrink-0" />
                 <span>+1 (555) 123-4567</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-muted-foreground">
-                <Mail size={18} className="text-cyan-500 shrink-0" />
+                <Mail size={18} className="text-orange-500 shrink-0" />
                 <span>hello@3dworks.com</span>
               </li>
             </ul>
@@ -176,7 +176,7 @@ export function Footer() {
                   className={cn(
                     "bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10",
                     "backdrop-blur",
-                    "focus:border-cyan-500 focus:ring-cyan-500/20 transition-colors",
+                    "focus:border-orange-500 focus:ring-orange-500/20 transition-colors",
                     error && "border-red-400 focus:ring-red-500/20"
                   )}
                   disabled={isLoading}
@@ -188,7 +188,7 @@ export function Footer() {
               <Button
                 type="submit"
                 disabled={isLoading || !email.trim()}
-                className="w-full bg-cyan-500 hover:bg-cyan-600 text-white hover-glow-cyan disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white hover-glow-orange disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <>
@@ -225,13 +225,13 @@ export function Footer() {
           <div className="flex gap-6 text-sm text-muted-foreground">
             <Link
               href="/privacy"
-              className="hover:text-cyan-500 transition-colors"
+              className="hover:text-orange-500 transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="hover:text-cyan-500 transition-colors"
+              className="hover:text-orange-500 transition-colors"
             >
               Terms of Service
             </Link>

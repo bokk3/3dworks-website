@@ -42,18 +42,18 @@ export function Hero() {
         <ParallaxElement speed={0.4} direction="down">
           <motion.div
             style={{ opacity }}
-            className="absolute top-20 left-[10%] w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-cyan-500/10 transform-gpu"
+            className="absolute top-20 left-[10%] w-[500px] h-[500px] bg-orange-500/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-orange-500/10 transform-gpu"
           />
         </ParallaxElement>
         <ParallaxElement speed={0.3} direction="up">
           <motion.div
             style={{ opacity }}
-            className="absolute bottom-20 right-[10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-purple-500/10 transform-gpu"
+            className="absolute bottom-20 right-[10%] w-[500px] h-[500px] bg-amber-500/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-amber-500/10 transform-gpu"
           />
         </ParallaxElement>
         {/* Additional depth layer */}
         <ParallaxElement speed={0.2} direction="down">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-cyan-500/5 to-purple-500/5 rounded-full blur-[150px] transform-gpu" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-orange-500/5 to-amber-500/5 rounded-full blur-[150px] transform-gpu" />
         </ParallaxElement>
       </div>
 
@@ -70,7 +70,7 @@ export function Hero() {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute top-1/4 right-[15%] w-24 h-24 border border-cyan-500/20 rounded-xl backdrop-blur-sm hidden lg:block transform-gpu"
+            className="absolute top-1/4 right-[15%] w-24 h-24 border border-orange-500/20 rounded-xl backdrop-blur-sm hidden lg:block transform-gpu"
           />
         </ParallaxElement>
         <ParallaxElement speed={0.25} direction="up">
@@ -85,7 +85,7 @@ export function Hero() {
               ease: "easeInOut",
               delay: 1,
             }}
-            className="absolute bottom-1/3 left-[10%] w-16 h-16 border border-purple-500/20 rounded-lg backdrop-blur-sm hidden lg:block transform-gpu"
+            className="absolute bottom-1/3 left-[10%] w-16 h-16 border border-amber-500/20 rounded-lg backdrop-blur-sm hidden lg:block transform-gpu"
           />
         </ParallaxElement>
       </div>
@@ -93,33 +93,50 @@ export function Hero() {
       {/* Content */}
       <div className="container relative z-10 px-4 md:px-6">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto space-y-8">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-sm font-medium text-cyan-600 dark:text-cyan-400 backdrop-blur-md"
-          >
-            <span className="flex h-2 w-2 rounded-full bg-cyan-500 mr-2 animate-pulse" />
-            Now accepting new orders
-          </motion.div>
-
-          {/* Main Headline */}
+          {/* Main Headline with staggered word animation */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            initial="hidden"
+            animate="visible"
             className="font-display font-bold text-5xl md:text-7xl tracking-tight leading-[1.1]"
           >
-            Precision 3D Printing for <br className="hidden md:block" />
-            <span className="text-gradient-cyber">Your Vision</span>
+            <motion.span
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="inline-block"
+            >
+              Precision 3D Printing{" "}
+            </motion.span>
+            <br className="hidden md:block" />
+            <motion.span
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              className="inline-block"
+            >
+              for{" "}
+            </motion.span>
+            <motion.span
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+              className="text-gradient-cyber inline-block"
+            >
+              Your Vision
+            </motion.span>
           </motion.h1>
 
           {/* Subheadline */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ duration: 0.7, delay: 0.6, ease: "easeOut" }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed"
           >
             From rapid prototyping to custom manufacturing — we bring your ideas
@@ -131,12 +148,12 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            transition={{ duration: 0.7, delay: 0.8, ease: "easeOut" }}
             className="flex flex-col sm:flex-row items-center gap-4 pt-4"
           >
             <Button
               size="lg"
-              className="h-12 px-8 text-base bg-cyan-500 hover:bg-cyan-600 text-white shadow-lg shadow-cyan-500/20 hover-glow-cyan min-w-[160px]"
+              className="h-12 px-8 text-base bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20 hover-glow-orange min-w-[160px]"
               asChild
             >
               <Link
@@ -150,7 +167,7 @@ export function Hero() {
             <Button
               size="lg"
               variant="outline"
-              className="h-12 px-8 text-base border-slate-200 hover:bg-slate-100 text-slate-700 dark:border-white/10 dark:text-white dark:hover:bg-white/5 dark:hover:border-cyan-500/50 min-w-[160px]"
+              className="h-12 px-8 text-base border-slate-200 hover:bg-slate-100 text-slate-700 dark:border-white/10 dark:text-white dark:hover:bg-white/5 dark:hover:border-orange-500/50 min-w-[160px]"
               asChild
             >
               <Link
@@ -166,7 +183,7 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1 }}
+            transition={{ duration: 1, delay: 1.2 }}
             className="pt-12 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center border-t border-border/50 w-full mt-8"
           >
             {[

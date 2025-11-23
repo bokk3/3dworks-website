@@ -103,7 +103,7 @@ export function StatsCard() {
             transition={{ duration: 0.5, delay: index * 0.1 }}
             className="glass-card p-6 rounded-xl text-center hover-lift"
           >
-            <div className="inline-flex p-3 rounded-lg bg-cyan-500/10 text-cyan-500 mb-4">
+            <div className="inline-flex p-3 rounded-lg bg-orange-500/10 text-orange-500 mb-4">
               <Icon size={24} />
             </div>
             <div className="text-3xl md:text-4xl font-display font-bold mb-2">

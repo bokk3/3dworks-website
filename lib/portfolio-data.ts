@@ -38,7 +38,7 @@ export const projects: PortfolioItem[] = [
     title: "Custom Mechanical Gears",
     category: "functional",
     image:
-      "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&q=80&w=800",
+      "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&q=80&w=800",
     description:
       "Replacement gear set for vintage machinery restoration. Precise tooth profiles and tolerances ensure smooth operation and longevity. These custom gears restored functionality to a 1950s industrial lathe, eliminating the need for expensive custom machining.",
     material: "Tough PLA",
@@ -145,7 +145,7 @@ export const projects: PortfolioItem[] = [
     title: "Medical Splint Prototype",
     category: "prototypes",
     image:
-      "https://images.unsplash.com/photo-1584036561566-b93a90a6b262?auto=format&fit=crop&q=80&w=800",
+      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800",
     description:
       "Breathable, custom-fit wrist splint for patient comfort. Designed from 3D scan of patient's anatomy for perfect fit. The lattice structure provides support while allowing airflow and reducing skin irritation. This medical-grade prototype demonstrates the potential for personalized healthcare solutions through 3D printing.",
     material: "Nylon PA12",

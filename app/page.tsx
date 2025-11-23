@@ -22,6 +22,10 @@ const Contact = dynamic(() => import("@/components/sections/Contact").then((mod)
   loading: () => <div className="section min-h-[400px]" />,
 });
 
+const Blog = dynamic(() => import("@/components/sections/Blog").then((mod) => ({ default: mod.Blog })), {
+  loading: () => <div className="section min-h-[400px]" />,
+});
+
 export default function Home() {
   return (
     <>
@@ -39,6 +43,7 @@ export default function Home() {
       <About />
       <Testimonials />
       <Contact />
+      <Blog />
       {/* Other sections will go here */}
     </>
   );

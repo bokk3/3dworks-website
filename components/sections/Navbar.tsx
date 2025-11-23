@@ -15,6 +15,7 @@ const navLinks = [
   { name: "Services", href: "#services", sectionId: "services" },
   { name: "About", href: "#about", sectionId: "about" },
   { name: "Contact", href: "#contact", sectionId: "contact" },
+  { name: "Blog", href: "/blog", sectionId: "" },
 ];
 
 const NAVBAR_HEIGHT = 80; // Offset for fixed navbar
@@ -154,13 +155,15 @@ export function Navbar() {
         transition={{ duration: 0.5 }}
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-          isScrolled ? "glass py-3 shadow-sm" : "bg-transparent py-5"
+          isScrolled 
+            ? "bg-background/95 backdrop-blur-xl border-b border-border/50 py-3 shadow-sm" 
+            : "bg-transparent py-5"
         )}
       >
         <div className="container flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative w-8 h-8 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-md flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:shadow-glow-cyan transition-all duration-300">
+            <div className="relative w-8 h-8 bg-gradient-to-br from-orange-500 to-amber-600 rounded-md flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:shadow-glow-orange transition-all duration-300">
               3D
             </div>
             <span className="font-display font-bold text-xl tracking-tight text-foreground group-hover:text-gradient-cyber transition-all duration-300">
@@ -172,7 +175,9 @@ export function Navbar() {
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => {
               const isActive =
-                pathname === "/" && activeSection === link.sectionId;
+                link.sectionId === ""
+                  ? pathname === link.href
+                  : pathname === "/" && activeSection === link.sectionId;
               return (
                 <Link
                   key={link.name}
@@ -181,14 +186,14 @@ export function Navbar() {
                   className={cn(
                     "text-sm font-medium transition-colors relative group",
                     isActive
-                      ? "text-cyan-500"
-                      : "text-muted-foreground hover:text-cyan-500"
+                      ? "text-orange-500"
+                      : "text-muted-foreground hover:text-orange-500"
                   )}
                 >
                   {link.name}
                   <span
                     className={cn(
-                      "absolute -bottom-1 left-0 h-0.5 bg-cyan-500 transition-all duration-300",
+                      "absolute -bottom-1 left-0 h-0.5 bg-orange-500 transition-all duration-300",
                       isActive ? "w-full" : "w-0 group-hover:w-full"
                     )}
                   />
@@ -200,7 +205,7 @@ export function Navbar() {
           {/* CTA Button */}
           <div className="hidden md:block">
             <Button
-              className="bg-cyan-500 hover:bg-cyan-600 text-white border-none hover-glow-cyan transition-all duration-300"
+              className="bg-orange-500 hover:bg-orange-600 text-white border-none hover-glow-orange transition-all duration-300"
               size="sm"
               onClick={() => {
                 analytics.trackCTAClick("Get Started", "navbar");
@@ -221,7 +226,7 @@ export function Navbar() {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden p-2 text-foreground hover:text-cyan-500 transition-colors"
+            className="md:hidden p-2 text-foreground hover:text-orange-500 transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -256,9 +261,13 @@ export function Navbar() {
                     }}
                     className={cn(
                       "flex items-center justify-between text-2xl font-display font-medium transition-colors py-2 border-b border-border/50",
-                      pathname === "/" && activeSection === link.sectionId
-                        ? "text-cyan-500"
-                        : "text-foreground hover:text-cyan-500"
+                      link.sectionId === ""
+                        ? pathname === link.href
+                          ? "text-orange-500"
+                          : "text-foreground hover:text-orange-500"
+                        : pathname === "/" && activeSection === link.sectionId
+                        ? "text-orange-500"
+                        : "text-foreground hover:text-orange-500"
                     )}
                   >
                     {link.name}
@@ -273,7 +282,7 @@ export function Navbar() {
                 className="mt-8"
               >
                 <Button
-                  className="w-full bg-cyan-500 hover:bg-cyan-600 text-white h-12 text-lg hover-glow-cyan"
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white h-12 text-lg hover-glow-orange"
                   onClick={() => {
                     analytics.trackCTAClick("Get Started", "mobile_menu");
                     const contactSection = document.getElementById("contact");

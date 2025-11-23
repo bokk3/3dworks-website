@@ -64,7 +64,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <Button
             variant="outline"
             asChild
-            className="border-white/10 hover:border-cyan-500/50"
+            className="border-white/10 hover:border-orange-500/50"
           >
             <Link href="/blog">
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to Blog

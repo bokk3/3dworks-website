@@ -86,13 +86,13 @@ export function BlogListingClient({
               placeholder="Search articles..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white/5 border-white/10 focus-visible:ring-cyan-500/20"
+              className="pl-10 bg-white/5 border-white/10 focus-visible:ring-orange-500/20"
             />
           </div>
 
           {/* Category Filter */}
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="bg-white/5 border-white/10 focus-visible:ring-cyan-500/20">
+            <SelectTrigger className="bg-white/5 border-white/10 focus-visible:ring-orange-500/20">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
@@ -107,7 +107,7 @@ export function BlogListingClient({
 
           {/* Tag Filter */}
           <Select value={selectedTag} onValueChange={setSelectedTag}>
-            <SelectTrigger className="bg-white/5 border-white/10 focus-visible:ring-cyan-500/20">
+            <SelectTrigger className="bg-white/5 border-white/10 focus-visible:ring-orange-500/20">
               <SelectValue placeholder="All Tags" />
             </SelectTrigger>
             <SelectContent>
@@ -131,7 +131,7 @@ export function BlogListingClient({
               variant="outline"
               size="sm"
               onClick={clearFilters}
-              className="border-white/10 text-muted-foreground hover:text-cyan-500 hover:border-cyan-500/50"
+              className="border-white/10 text-muted-foreground hover:text-orange-500 hover:border-orange-500/50"
             >
               <X className="mr-2 h-4 w-4" /> Clear Filters
             </Button>
@@ -154,7 +154,7 @@ export function BlogListingClient({
           <Button
             variant="outline"
             onClick={clearFilters}
-            className="mt-4 border-white/10 hover:border-cyan-500/50"
+            className="mt-4 border-white/10 hover:border-orange-500/50"
           >
             Clear Filters
           </Button>

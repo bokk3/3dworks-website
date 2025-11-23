@@ -299,28 +299,28 @@ export function ContactForm() {
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="glass-card p-8 rounded-2xl"
+      className="glass-card p-6 rounded-2xl"
     >
       {/* Form Progress Indicator */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-muted-foreground">
+      <div className="mb-4">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs font-medium text-muted-foreground">
             Form Progress
           </span>
-          <span className="text-sm font-semibold text-cyan-500">{formProgress}%</span>
+          <span className="text-xs font-semibold text-orange-500">{formProgress}%</span>
         </div>
-        <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+        <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${formProgress}%` }}
             transition={{ duration: 0.3 }}
-            className="h-full bg-gradient-to-r from-cyan-500 to-purple-500"
+            className="h-full bg-gradient-to-r from-orange-500 to-amber-500"
           />
         </div>
       </div>
 
-      <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
               Name *
@@ -336,7 +336,7 @@ export function ContactForm() {
                 "bg-white/5 border-white/10",
                 validationErrors.name
                   ? "border-red-400 focus-visible:ring-red-500/50"
-                  : "focus-visible:ring-cyan-500/20"
+                  : "focus-visible:ring-orange-500/20"
               )}
             />
             {validationErrors.name && (
@@ -359,7 +359,7 @@ export function ContactForm() {
                 "bg-white/5 border-white/10",
                 validationErrors.email
                   ? "border-red-400 focus-visible:ring-red-500/50"
-                  : "focus-visible:ring-cyan-500/20"
+                  : "focus-visible:ring-orange-500/20"
               )}
             />
             {validationErrors.email && (
@@ -368,7 +368,7 @@ export function ContactForm() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label htmlFor="projectType" className="text-sm font-medium">
               Project Type
@@ -411,7 +411,7 @@ export function ContactForm() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label htmlFor="material" className="text-sm font-medium">
               Preferred Material
@@ -449,7 +449,7 @@ export function ContactForm() {
                 "bg-white/5 border-white/10",
                 validationErrors.quantity
                   ? "border-red-400 focus-visible:ring-red-500/50"
-                  : "focus-visible:ring-cyan-500/20"
+                  : "focus-visible:ring-orange-500/20"
               )}
             />
             {validationErrors.quantity && (
@@ -494,10 +494,10 @@ export function ContactForm() {
             onChange={(e) => handleInputChange("message", e.target.value)}
             onBlur={(e) => handleInputBlur("message", e.target.value)}
             className={cn(
-              "min-h-[120px] bg-white/5 border-white/10",
+              "min-h-[80px] max-h-[120px] bg-white/5 border-white/10",
               validationErrors.message
                 ? "border-red-400 focus-visible:ring-red-500/50"
-                : "focus-visible:ring-cyan-500/20"
+                : "focus-visible:ring-orange-500/20"
             )}
           />
           {validationErrors.message && (
@@ -510,26 +510,12 @@ export function ContactForm() {
           )}
         </div>
 
-        {/* Enhanced File Upload with Drag-and-Drop */}
+        {/* File Upload Button */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">
+          <label className="text-xs font-medium text-muted-foreground">
             Upload 3D Model Files (Optional, Max {MAX_FILES} files)
           </label>
-          <div
-            ref={dropZoneRef}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={cn(
-              "relative border-2 border-dashed rounded-lg p-6 transition-all text-center cursor-pointer group",
-              isDragging
-                ? "border-cyan-500 bg-cyan-500/10 scale-105"
-                : validationErrors.files
-                ? "border-red-400 hover:border-red-300"
-                : "border-white/10 hover:border-cyan-500/50 hover:bg-cyan-500/5"
-            )}
-            onClick={() => fileInputRef.current?.click()}
-          >
+          <div className="flex items-center gap-2">
             <input
               ref={fileInputRef}
               type="file"
@@ -538,48 +524,49 @@ export function ContactForm() {
               onChange={handleFileSelect}
               className="hidden"
             />
-            <div
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
               className={cn(
-                "flex flex-col items-center gap-2 transition-colors",
-                isDragging || validationErrors.files
-                  ? "text-cyan-500"
-                  : "text-muted-foreground group-hover:text-cyan-500"
+                "flex items-center gap-2",
+                isDragging && "border-orange-500 bg-orange-500/10"
               )}
             >
-              <Upload size={24} />
-              <span className="text-sm">
-                {isDragging
-                  ? "Drop files here"
-                  : files.length > 0
-                  ? `${files.length} file(s) selected`
-                  : "Drop STL/OBJ/STEP files here or click to upload"}
-              </span>
+              <Upload size={16} />
+              {files.length > 0 ? `${files.length} file(s)` : "Upload Files"}
+            </Button>
+            {files.length > 0 && (
               <span className="text-xs text-muted-foreground">
-                Max {MAX_FILES} files, {MAX_FILE_SIZE / (1024 * 1024)}MB each
+                {files.length} file{files.length > 1 ? "s" : ""} selected
               </span>
-            </div>
+            )}
           </div>
           {validationErrors.files && (
-            <p className="text-sm text-red-400">{validationErrors.files}</p>
+            <p className="text-xs text-red-400">{validationErrors.files}</p>
           )}
 
-          {/* File Previews */}
+          {/* File Previews - Compact */}
           <AnimatePresence>
             {files.length > 0 && (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {files.map((file, index) => (
                   <motion.div
                     key={`${file.name}-${index}`}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -20 }}
-                    className="flex items-center justify-between text-xs bg-cyan-500/10 text-cyan-500 px-3 py-2 rounded-md"
+                    className="flex items-center justify-between text-xs bg-orange-500/10 text-orange-500 px-2 py-1.5 rounded-md"
                   >
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <File size={14} />
+                    <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                      <File size={12} />
                       <span className="truncate">{file.name}</span>
-                      <span className="text-muted-foreground">
-                        ({(file.size / (1024 * 1024)).toFixed(2)} MB)
+                      <span className="text-muted-foreground text-[10px]">
+                        ({(file.size / (1024 * 1024)).toFixed(2)}MB)
                       </span>
                     </div>
                     <button
@@ -588,9 +575,9 @@ export function ContactForm() {
                         e.stopPropagation();
                         removeFile(index);
                       }}
-                      className="hover:text-cyan-400 ml-2"
+                      className="hover:text-orange-400 ml-1"
                     >
-                      <X size={14} />
+                      <X size={12} />
                     </button>
                   </motion.div>
                 ))}
@@ -617,7 +604,7 @@ export function ContactForm() {
         <Button
           type="submit"
           disabled={isLoading || !isFormValid}
-          className="w-full bg-cyan-500 hover:bg-cyan-600 text-white shadow-lg shadow-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? (
             <>

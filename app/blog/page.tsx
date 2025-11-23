@@ -34,15 +34,15 @@ export default function BlogPage() {
       {/* Background Pattern */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 grid-pattern opacity-[0.03] dark:opacity-[0.05]" />
-        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-cyan-500/5 rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-purple-500/5 rounded-full blur-[100px]" />
+        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-orange-500/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-amber-500/5 rounded-full blur-[100px]" />
       </div>
 
       <div className="container relative z-10">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <h1 className="text-4xl md:text-5xl font-display font-bold">
-            <span className="text-gradient-cyan">3D Printing</span> Knowledge Base
+            <span className="text-gradient-cyber">3D Printing</span> Knowledge Base
           </h1>
           <p className="text-lg text-muted-foreground">
             Expert insights, tips, case studies, and industry news to help you

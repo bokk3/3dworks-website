@@ -43,13 +43,13 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
         <div className="p-6">
           {/* Category Badge */}
           <div className="mb-3">
-            <span className="px-3 py-1 text-xs font-medium text-cyan-600 dark:text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 rounded-full uppercase tracking-wider">
+            <span className="px-3 py-1 text-xs font-medium text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/20 rounded-full uppercase tracking-wider">
               {post.category}
             </span>
           </div>
 
           {/* Title */}
-          <h3 className="text-xl font-display font-bold mb-2 group-hover:text-cyan-500 transition-colors line-clamp-2">
+          <h3 className="text-xl font-display font-bold mb-2 group-hover:text-orange-500 transition-colors line-clamp-2">
             {post.title}
           </h3>
 
@@ -87,7 +87,7 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
           </div>
 
           {/* Read More */}
-          <div className="flex items-center gap-2 text-cyan-500 font-medium text-sm group-hover:gap-3 transition-all">
+          <div className="flex items-center gap-2 text-orange-500 font-medium text-sm group-hover:gap-3 transition-all">
             Read More <ArrowRight size={16} />
           </div>
         </div>
