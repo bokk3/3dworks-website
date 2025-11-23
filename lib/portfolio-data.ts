@@ -14,6 +14,7 @@ export interface PortfolioItem {
   clientCompany?: string;
   beforeAfterImages?: string[];
   processImages?: string[];
+  model3dUrl?: string;
 }
 
 export const projects: PortfolioItem[] = [
